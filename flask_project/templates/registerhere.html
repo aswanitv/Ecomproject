@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register - Shopuniverse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">
+        <img src="{{ url_for('static', filename='Gemini_Generated_Image_k8m5q9k8m5q9k8m5.png') }}" alt="Shopuniverse">
+    </div>
+    <div class="nav-links">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+        <div class="dropdown">
+            <a href="#">Dresses &#9662;</a>
+            <div class="dropdown-content">
+                <a href="{{ url_for('casual') }}">Casual Wear</a>
+                <a href="{{ url_for('party') }}">Party Wear</a>
+                <a href="{{ url_for('ethnic') }}">Ethnic Wear</a>
+            </div>
+        </div>
+        <a href="{{ url_for('contact') }}">Contact</a>
+    </div>
+    <div class="nav-right">
+        <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+        <a href="{{ url_for('cart') }}" class="cart-btn">My Cart</a>
+    </div>
+</div>
+
+<!-- REGISTER SECTION -->
+<div style="
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to right, #c2f0ff, #e8f8ff);
+    padding: 40px 20px;
+">
+    <div style="
+        background-color: #e8edf2;
+        border-radius: 16px;
+        padding: 40px 35px;
+        width: 380px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    ">
+        <h2 style="text-align: center; font-size: 22px; color: #111; margin-bottom: 10px;">Create Account</h2>
+
+        <form action="{{ url_for('register') }}" method="POST" style="display: flex; flex-direction: column; gap: 12px;">
+
+            <input type="text" name="fullname" placeholder="Full Name" required style="
+                width: 100%; padding: 12px 15px;
+                border: 1px solid #ccc; border-radius: 8px;
+                font-size: 14px; background: white; outline: none;
+            ">
+
+            <input type="email" name="email" placeholder="Email" required style="
+                width: 100%; padding: 12px 15px;
+                border: 1px solid #ccc; border-radius: 8px;
+                font-size: 14px; background: white; outline: none;
+            ">
+
+            <input type="password" name="password" placeholder="Password" required style="
+                width: 100%; padding: 12px 15px;
+                border: 1px solid #ccc; border-radius: 8px;
+                font-size: 14px; background: white; outline: none;
+            ">
+
+            <input type="password" name="confirm_password" placeholder="Confirm Password" required style="
+                width: 100%; padding: 12px 15px;
+                border: 1px solid #ccc; border-radius: 8px;
+                font-size: 14px; background: white; outline: none;
+            ">
+
+            <button type="submit" style="
+                width: 100%; padding: 12px;
+                background-color: #1a1a1a; color: #f5c518;
+                border: none; border-radius: 8px;
+                font-size: 15px; font-weight: bold;
+                cursor: pointer; letter-spacing: 0.5px; margin: 0;
+            ">Register</button>
+
+        </form>
+
+        <p style="text-align: center; font-size: 13px; color: #555; margin-top: 5px;">
+            Already have an account?
+            <a href="{{ url_for('login') }}" style="color: #15c9f6; font-weight: bold; text-decoration: none;">Login here</a>
+        </p>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <div class="footer-top"><a href="#">Back to top</a></div>
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>Shopuniverse</h3>
+            <a href="{{ url_for('about') }}">About Us</a>
+            <a href="#">Careers</a>
+            <a href="#">Blog</a>
+        </div>
+        <div class="footer-column">
+            <h3>Help</h3>
+            <a href="#">Customer Support</a>
+            <a href="#">FAQs</a>
+            <a href="#">Shipping Info</a>
+            <a href="#">Returns & Refunds</a>
+        </div>
+        <div class="footer-column">
+            <h3>Categories</h3>
+            <a href="{{ url_for('casual') }}">Casual Wear</a>
+            <a href="{{ url_for('party') }}">Party Wear</a>
+            <a href="{{ url_for('ethnic') }}">Ethnic Wear</a>
+        </div>
+        <div class="footer-column">
+            <h3>Policies</h3>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">Return Policy</a>
+        </div>
+        <div class="footer-column">
+            <h3>Connect</h3>
+            <a href="#">Instagram</a>
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="{{ url_for('contact') }}">Email Us</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 Shopuniverse | All Rights Reserved</p>
+    </div>
+</div>
+
+</body>
+</html>

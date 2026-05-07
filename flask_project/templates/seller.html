@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Seller Login - Shopuniverse</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+
+    <!-- LOGO -->
+    <div class="logo">
+        <img src="{{ url_for('static', filename='Gemini_Generated_Image_k8m5q9k8m5q9k8m5.png') }}" alt="Shopuniverse">
+    </div>
+
+    <!-- NAV LINKS -->
+    <div class="nav-links">
+
+        <a href="{{ url_for('index') }}">Home</a>
+
+        <a href="{{ url_for('about') }}">About</a>
+
+        <div class="dropdown">
+            <a href="#">Dresses &#9662;</a>
+
+            <div class="dropdown-content">
+                <a href="{{ url_for('casual') }}">Casual Wear</a>
+                <a href="{{ url_for('party') }}">Party Wear</a>
+                <a href="{{ url_for('ethnic') }}">Ethnic Wear</a>
+            </div>
+        </div>
+
+        <a href="{{ url_for('contact') }}">Contact</a>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="nav-right">
+
+        <a href="{{ url_for('login') }}" class="login-btn">
+            <i class="fa fa-user"></i> Login
+        </a>
+
+        <a href="{{ url_for('seller') }}" class="seller-btn">
+            <i class="fa fa-store"></i> Seller
+        </a>
+
+        <a href="{{ url_for('cart') }}" class="cart-btn">
+            <i class="fa fa-shopping-cart"></i> My Cart
+        </a>
+
+    </div>
+
+</div>
+
+<!-- SELLER LOGIN SECTION -->
+<div class="login-container">
+
+    <div class="login-box">
+
+        <h2>Seller Login</h2>
+
+        <p>Manage your dress store easily</p>
+
+        <form method="POST">
+
+            <input type="email"
+            name="email"
+            placeholder="Enter your email"
+            required>
+
+            <input type="password"
+            name="password"
+            placeholder="Enter your password"
+            required>
+
+            <button type="submit">Login</button>
+
+        </form>
+
+        <div class="register-link">
+            New Seller?
+            <a href="#">Register Here</a>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

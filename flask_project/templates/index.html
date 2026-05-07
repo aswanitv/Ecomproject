@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shopuniverse - Dresses Store</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+
+    <div class="logo">
+        <img src="{{ url_for('static', filename='Gemini_Generated_Image_k8m5q9k8m5q9k8m5.png') }}" alt="Shopuniverse">
+    </div>
+
+    <div class="nav-links">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+        <div class="dropdown">
+            <a href="#">Dresses &#9662;</a>
+            <div class="dropdown-content">
+                <a href="{{ url_for('casual') }}">Casual Wear</a>
+                <a href="{{ url_for('party') }}">Party Wear</a>
+                <a href="{{ url_for('ethnic') }}">Ethnic Wear</a>
+            </div>
+        </div>
+        <a href="{{ url_for('contact') }}">Contact</a>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="nav-right">
+        <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+        <a href="{{ url_for('cart') }}" class="cart-btn">My Cart</a>
+        <a href="{{ url_for('seller') }}" class="seller-btn">
+        <i class="fa fa-store"></i> Seller
+        </a>
+    </div>
+
+</div>
+
+<!-- HERO -->
+<div class="hero">
+    <h1>Trendy Dresses for Every Occasion</h1>
+    <p>Discover the latest styles in fashion at Shopuniverse</p>
+    <button onclick="window.location.href='{{ url_for('casual') }}'">Shop Now</button>
+</div>
+
+<!-- FEATURES -->
+<div class="features">
+
+    <div class="feature-box">
+        <h3>Latest Fashion</h3>
+        <p>Explore trending dresses updated daily.</p>
+    </div>
+
+    <div class="feature-box">
+        <h3>Affordable Prices</h3>
+        <p>Stylish outfits at budget-friendly prices.</p>
+    </div>
+
+    <div class="feature-box">
+        <h3>Easy Returns</h3>
+        <p>7-day easy return policy.</p>
+    </div>
+
+    <div class="feature-box">
+        <h3>Secure Payments</h3>
+        <p>UPI, cards, and wallet payments.</p>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+
+    <div class="footer-top">
+        <a href="#">Back to top</a>
+    </div>
+
+    <div class="footer-content">
+
+        <div class="footer-column">
+            <h3>Shopuniverse</h3>
+            <a href="{{ url_for('about') }}">About Us</a>
+            <a href="#">Careers</a>
+            <a href="#">Blog</a>
+        </div>
+
+        <div class="footer-column">
+            <h3>Help</h3>
+            <a href="#">Customer Support</a>
+            <a href="#">FAQs</a>
+            <a href="#">Shipping Info</a>
+            <a href="#">Returns & Refunds</a>
+        </div>
+
+        <div class="footer-column">
+            <h3>Categories</h3>
+            <a href="{{ url_for('casual') }}">Casual Wear</a>
+            <a href="{{ url_for('party') }}">Party Wear</a>
+            <a href="{{ url_for('ethnic') }}">Ethnic Wear</a>
+        </div>
+
+        <div class="footer-column">
+            <h3>Policies</h3>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">Return Policy</a>
+        </div>
+
+        <div class="footer-column">
+            <h3>Connect</h3>
+            <a href="#">Instagram</a>
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="{{ url_for('contact') }}">Email Us</a>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 Shopuniverse | All Rights Reserved</p>
+    </div>
+
+</div>
+
+<!-- CART SCRIPT -->
+<script>
+function addToCart(name, price, image) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push({ name: name, price: price, image: image });
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert("Item added to cart!");
+}
+</script>
+
+</body>
+</html>
