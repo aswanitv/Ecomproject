@@ -19,16 +19,16 @@ body {
 }
 
 .logo img {
-    height: 90px;
-    padding: 6px;
-    background-color: white;
+    height: 70px; /* fit inside navbar (80px) to prevent overflow */
+    padding: 0px;
+    background-color: transparent;
     border-radius: 10px;
     box-shadow: 0 0 12px rgba(0,0,0,0.3);
     transition: 0.3s;
 }
 
 .logo img:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 
 /* NAV LINKS */
@@ -609,9 +609,8 @@ button {
 }
 
 /* LOGO */
-.logo img{
-    height: 50px;
-}
+/* NOTE: The logo sizing is controlled by the main .logo img rule above.
+   This block is intentionally left blank to avoid shrinking/overriding it. */
 
 /* CENTER NAVIGATION */
 .nav-links{
