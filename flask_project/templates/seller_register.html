@@ -1,112 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Seller Login - Shopuniverse</title>
-
-    <!-- CSS -->
+    <title>Seller Register - Shopuniverse</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
-    <!-- FONT AWESOME -->
     <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 </head>
 <body>
 
 <!-- NAVBAR -->
 <div class="navbar">
-
-    <!-- LOGO -->
     <div class="logo">
         <img src="{{ url_for('static', filename='Gemini_Generated_Image_k8m5q9k8m5q9k8m5.png') }}" alt="Shopuniverse">
     </div>
 
-    <!-- NAV LINKS -->
     <div class="nav-links">
-
         <a href="{{ url_for('index') }}">Home</a>
-
         <a href="{{ url_for('about') }}">About</a>
-
         <div class="dropdown">
             <a href="#">Dresses &#9662;</a>
-
             <div class="dropdown-content">
                 <a href="{{ url_for('casual') }}">Casual Wear</a>
                 <a href="{{ url_for('party') }}">Party Wear</a>
                 <a href="{{ url_for('ethnic') }}">Ethnic Wear</a>
             </div>
         </div>
-
         <a href="{{ url_for('contact') }}">Contact</a>
-
     </div>
 
-    <!-- RIGHT SIDE -->
     <div class="nav-right">
-
-        <a href="{{ url_for('login') }}" class="login-btn">
+        <a href="{{ url_for('seller_login') }}" class="login-btn">
             <i class="fa fa-user"></i> Login
         </a>
-
         <a href="{{ url_for('seller') }}" class="seller-btn">
             <i class="fa fa-store"></i> Seller
         </a>
-
         <a href="{{ url_for('cart') }}" class="cart-btn">
             <i class="fa fa-shopping-cart"></i> My Cart
         </a>
-
     </div>
-
 </div>
 
-<!-- SELLER LOGIN SECTION -->
+<!-- REGISTER SECTION -->
 <div class="login-container">
-
     <div class="login-box">
-
-        <h2>Seller Login</h2>
-
-        <p>Manage your dress store easily</p>
+        <h2>Seller Register</h2>
+        <p>Create your seller account</p>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div style="margin-bottom:12px;">
                 {% for category, message in messages %}
                     {% if category == 'seller_error' %}
-                        <p style="margin:0; color: #d9534f;">{{ message }}</p>
+                        <p style="margin:0; color: #d9534f;">
+                            {{ message }}
+                        </p>
                     {% else %}
-                        <p style="margin:0; color: #28a745;">{{ message }}</p>
+                        <p style="margin:0; color: #28a745;">
+                            {{ message }}
+                        </p>
                     {% endif %}
                 {% endfor %}
             </div>
         {% endif %}
         {% endwith %}
 
-        <form method="POST" action="{{ url_for('seller_login') }}">
+        <form action="{{ url_for('seller_register') }}" method="POST" style="display:flex;flex-direction:column;gap:12px;">
+            <input type="text"
+                   name="full_name"
+                   placeholder="Full Name"
+                   required>
 
             <input type="email"
-            name="email"
-            placeholder="Enter your email"
-            required>
+                   name="email"
+                   placeholder="Email"
+                   required>
 
             <input type="password"
-            name="password"
-            placeholder="Enter your password"
-            required>
+                   name="password"
+                   placeholder="Password"
+                   required>
 
-            <button type="submit">Login</button>
+            <input type="password"
+                   name="confirm_password"
+                   placeholder="Confirm Password"
+                   required>
 
+            <button type="submit">Create Account</button>
         </form>
 
-        <div class="register-link">
-            New Seller?
-            <a href="{{ url_for('seller_register') }}">Register Here</a>
+        <div class="register-link" style="margin-top:10px;">
+            Already have an account?
+            <a href="{{ url_for('seller_login') }}">Login</a>
         </div>
-
     </div>
-
 </div>
 
 </body>

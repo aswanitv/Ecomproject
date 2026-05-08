@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Seller Dashboard - Shopuniverse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">
+        <img src="{{ url_for('static', filename='Gemini_Generated_Image_k8m5q9k8m5q9k8m5.png') }}" alt="Shopuniverse">
+    </div>
+
+    <div class="nav-right">
+        <a href="{{ url_for('seller_dashboard') }}" class="seller-btn">
+            <i class="fa fa-store"></i> Dashboard
+        </a>
+        <a href="{{ url_for('seller_logout') }}" class="login-btn">
+            <i class="fa fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+</div>
+
+<div class="login-container">
+    <div class="login-box">
+        <h2>Seller Dashboard</h2>
+        <p>Logged in as <b>{{ seller_email }}</b></p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div style="margin:10px 0;">
+                {% for category, message in messages %}
+                    {% if category == 'seller_error' %}
+                        <p style="margin:0; color: #d9534f;">{{ message }}</p>
+                    {% else %}
+                        <p style="margin:0; color: #28a745;">{{ message }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+        <div style="margin-top:18px; padding:14px; background:#fff; border:1px solid #ddd; border-radius:12px;">
+            <h3 style="margin:0 0 8px 0;">Coming soon</h3>
+            <p style="margin:0; color:#555;">
+                Add seller products, manage orders, and view analytics in this dashboard.
+            </p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
