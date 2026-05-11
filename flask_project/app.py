@@ -57,12 +57,20 @@ def init_db():
                 seller_id INTEGER NOT NULL,
                 name TEXT NOT NULL,
                 price REAL NOT NULL DEFAULT 0,
+                description TEXT,
                 image_url TEXT,
                 created_at TEXT NOT NULL,
                 FOREIGN KEY (seller_id) REFERENCES sellers(id) ON DELETE CASCADE ON UPDATE CASCADE
             )
             """
         )
+
+        # Backfill/compat: add description column if DB already exists without it.
+        # SQLite will throw if column exists; we ignore that.
+        try:
+            conn.execute("ALTER TABLE products ADD COLUMN description TEXT")
+        except sqlite3.OperationalError:
+            pass
 
         conn.commit()
     finally:
@@ -251,15 +259,75 @@ def seller_login():
     return render_template("seller.html")
 
 
+@app.route("/seller/add_product", methods=["POST"])
+def seller_add_product():
+    if not seller_login_required():
+        flash("Please login to add products.", "seller_error")
+        return redirect(url_for("seller_login"))
+
+    name = (request.form.get("name") or "").strip()
+    price_raw = (request.form.get("price") or "").strip()
+    description = (request.form.get("description") or "").strip()
+    image_url = (request.form.get("image_url") or "").strip()
+
+    if not name:
+        flash("Product name is required.", "seller_error")
+        return redirect(url_for("seller_dashboard"))
+
+    try:
+        price = float(price_raw) if price_raw else 0.0
+    except ValueError:
+        flash("Invalid price.", "seller_error")
+        return redirect(url_for("seller_dashboard"))
+
+    conn = get_db_connection()
+    try:
+        conn.execute(
+            """
+            INSERT INTO products (seller_id, name, price, description, image_url, created_at)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (
+                session.get("seller_id"),
+                name,
+                price,
+                description,
+                image_url if image_url else None,
+                datetime.utcnow().isoformat(),
+            ),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    flash("Product added successfully.", "seller_success")
+    return redirect(url_for("seller_dashboard"))
+
+
 @app.route("/seller/dashboard")
 def seller_dashboard():
     if not seller_login_required():
         flash("Please login to access seller dashboard.", "seller_error")
         return redirect(url_for("seller_login"))
 
+    conn = get_db_connection()
+    try:
+        products = conn.execute(
+            """
+            SELECT id, name, price, description, image_url, created_at
+            FROM products
+            WHERE seller_id = ?
+            ORDER BY datetime(created_at) DESC, id DESC
+            """,
+            (session.get("seller_id"),),
+        ).fetchall()
+    finally:
+        conn.close()
+
     return render_template(
         "seller_dashboard.html",
         seller_email=session.get("seller_email"),
+        products=products,
     )
 
 
