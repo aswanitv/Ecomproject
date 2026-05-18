@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Denim Casual Dress - Shopuniverse</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Red Satin Party Dress - Shopuniverse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
@@ -10,7 +10,7 @@
 <div class="navbar">
 
     <div class="logo">
-        <img src="Gemini_Generated_Image_k8m5q9k8m5q9k8m5.png">
+        <img src="{{ url_for('static', filename='logo3.jpg')}}">
     </div>
 
     <div class="nav-links">
@@ -36,23 +36,24 @@
 <div class="product-details">
 
     <div class="product-image">
-        <img src="scnd.jpeg" alt="Denim Casual Dress">
+        <img src="{{ url_for('static', filename='img/red.jpeg') }}" alt="Red Satin Party Dress">
     </div>
 
     <div class="product-info">
-        <h1>Denim Casual Dress</h1>
-        <p class="price">₹1199</p>
+        <h1>Red Satin Party Dress</h1>
+        <p class="price">₹1799</p>
 
         <p class="description">
-            Upgrade your everyday look with this stylish denim casual dress. 
-            Designed for comfort and durability, it’s perfect for outings, travel, and daily wear.
+            Make a bold statement with this stunning red satin party dress.
+            Its smooth, glossy finish and elegant design make it perfect for
+            parties, evening events, and special occasions.
         </p>
 
         <ul>
-            <li>✔ Premium quality denim fabric</li>
-            <li>✔ Durable and long-lasting</li>
-            <li>✔ Modern and trendy design</li>
-            <li>✔ Comfortable fit for all-day wear</li>
+            <li>✔ Luxurious satin fabric</li>
+            <li>✔ Smooth and shiny finish</li>
+            <li>✔ Stylish and elegant design</li>
+            <li>✔ Comfortable fit for long wear</li>
         </ul>
 
         <button>Add to Cart</button>
@@ -60,7 +61,6 @@
     </div>
 
 </div>
-
 <div class="footer">
 
     <div class="footer-top">

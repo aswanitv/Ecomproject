@@ -1,19 +1,10 @@
-# TODO - Seller product dropdown + seller dashboard add (option 1)
+# TODO
 
-- [ ] Inspect and map the hardcoded products from:
-  - [ ] flask_project/templates/casual.html
-  - [ ] flask_project/templates/party.html
-  - [ ] flask_project/templates/ethnic.html
-- [x] Update DB schema in `flask_project/app.py`:
-  - [x] Add `description` column to `products` table
-- [x] Add new Flask route in `flask_project/app.py`:
-  - [x] `POST /seller/add_product` to insert a product for current logged-in seller
-- [x] Update `flask_project/templates/seller.html`:
-  - [x] Add navbar dropdown "Products" that lists product name, price, description
-  - [x] Add "Add" buttons that submit to `/seller/add_product`
-- [x] Update `flask_project/templates/seller_dashboard.html`:
-  - [x] Display product description under each product card
-- [ ] Quick verification:
-  - [ ] Login as seller
-  - [ ] Use navbar "Products" dropdown and click Add
-  - [ ] Confirm added products appear in Seller Dashboard with description
+- [ ] Fix 404 for floral image (`/frst.jpeg`) by using Flask static URLs in product detail templates.
+- [ ] Update `flask_project/templates/html_project/floral.html` to load images from `url_for('static', filename='img/...')`.
+- [x] Fix remaining 404s for navbar/logo images in `floral.html`.
+
+- [ ] Update other html_project detail templates (optional/if needed) to avoid similar 404s for `.jpeg` and logo `.png` images.
+- [ ] Run the Flask app and verify `/frst.jpeg` and `/Gemini_Generated_Image_k8m5q9k8m5q9k8m5q9k8m5.png` (or equivalent) load correctly with no more 404s.
+
+

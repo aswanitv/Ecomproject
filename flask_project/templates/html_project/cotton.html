@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Saree Collection - Shopuniverse</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Cotton Daily Wear - Shopuniverse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <!-- NAVBAR -->
 <div class="navbar">
+
     <div class="logo">
-        <img src="Gemini_Generated_Image_k8m5q9k8m5q9k8m5.png">
+        <img src="{{ url_for('static', filename='logo3.jpg')}}">
     </div>
 
     <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+
 
         <div class="dropdown">
             <a href="#">Dresses &#9662;</a>
@@ -31,40 +33,31 @@
     <a href="login.html" class="login-btn">Login</a>
 </div>
 
+<div style="height: 70px;"></div>
+
 <!-- PRODUCT DETAILS -->
 <div class="product-details">
 
-    <!-- IMAGE -->
+
     <div class="product-image">
-        <img src="saree.jpeg" alt="Saree Collection">
+        <img src="{{ url_for('static', filename='img/third.jpeg') }}" alt="Cotton Daily Wear">
     </div>
 
-    <!-- INFO -->
     <div class="product-info">
-        <h1>Saree Collection</h1>
-        <p class="price">₹1999</p>
+        <h1>Cotton Daily Wear</h1>
+        <p class="price">₹699</p>
 
         <p class="description">
-            Discover elegance with our premium saree collection, designed to
-            bring out traditional beauty with a modern touch. Perfect for
-            weddings, festivals, and special occasions.
+            Experience all-day comfort with this soft cotton daily wear dress. 
+            Perfect for regular use, office wear, and relaxed outings.
         </p>
 
         <ul>
-            <li>✔ High-quality silk & chiffon fabrics</li>
-            <li>✔ Beautiful prints and embroidery</li>
-            <li>✔ Lightweight and comfortable to wear</li>
-            <li>✔ Perfect for festive & traditional events</li>
+            <li>✔ 100% pure cotton fabric</li>
+            <li>✔ Soft, breathable, and skin-friendly</li>
+            <li>✔ Ideal for hot weather</li>
+            <li>✔ Simple and elegant design</li>
         </ul>
-
-        <h3>Available Colors:</h3>
-        <p>Red | Blue | Green | Gold | Black</p>
-
-        <h3>Fabric Type:</h3>
-        <p>Silk | Cotton | Chiffon</p>
-
-        <h3>Product Includes:</h3>
-        <p>Saree + Blouse Piece</p>
 
         <button>Add to Cart</button>
         <button class="buy-btn">Buy Now</button>

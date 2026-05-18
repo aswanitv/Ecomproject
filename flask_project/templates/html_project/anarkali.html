@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Red Satin Party Dress - Shopuniverse</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Anarkali Dress - Shopuniverse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <!-- NAVBAR -->
 <div class="navbar">
-
     <div class="logo">
-        <img src="Gemini_Generated_Image_k8m5q9k8m5q9k8m5.png">
+        <img src="{{ url_for('static', filename='logo3.jpg')}}">
     </div>
 
     <div class="nav-links">
@@ -35,32 +34,41 @@
 <!-- PRODUCT DETAILS -->
 <div class="product-details">
 
+    <!-- IMAGE -->
     <div class="product-image">
-        <img src="red.jpeg" alt="Red Satin Party Dress">
+        <img src="{{ url_for('static', filename='img/anar.jpeg') }}" alt="Anarkali Dress">
     </div>
 
+    <!-- INFO -->
     <div class="product-info">
-        <h1>Red Satin Party Dress</h1>
-        <p class="price">₹1799</p>
+        <h1>Anarkali Dress</h1>
+        <p class="price">₹1499</p>
 
         <p class="description">
-            Make a bold statement with this stunning red satin party dress.
-            Its smooth, glossy finish and elegant design make it perfect for
-            parties, evening events, and special occasions.
+            Elevate your ethnic style with this beautifully designed Anarkali dress.
+            Crafted with premium fabric, it offers a royal look with maximum comfort.
+            Perfect for weddings, festivals, and special occasions.
         </p>
 
         <ul>
-            <li>✔ Luxurious satin fabric</li>
-            <li>✔ Smooth and shiny finish</li>
-            <li>✔ Stylish and elegant design</li>
-            <li>✔ Comfortable fit for long wear</li>
+            <li>✔ Premium soft fabric</li>
+            <li>✔ Full-length elegant design</li>
+            <li>✔ Ideal for weddings & festive wear</li>
+            <li>✔ Comfortable and breathable</li>
         </ul>
+
+        <h3>Available Sizes:</h3>
+        <p>S | M | L | XL</p>
 
         <button>Add to Cart</button>
         <button class="buy-btn">Buy Now</button>
     </div>
 
 </div>
+ Shopuniverse</p>
+    </div>
+
+</div> 
 <div class="footer">
 
     <div class="footer-top">

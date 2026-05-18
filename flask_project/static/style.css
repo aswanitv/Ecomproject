@@ -97,11 +97,50 @@ body {
     display: block;
 }
 
+/* PRODUCTS GRID (rows & columns) */
+.products{
+    width: 100%;
+    padding: 40px 20px 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    align-items: start;
+    justify-items: center;
+}
+
+/* CART ITEMS GRID (rows & columns) */
+#cart-items{
+    width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    align-items: start;
+    justify-items: center;
+}
+
+/* Keep cart item card content aligned consistently */
+#cart-items .cart-item{
+    border: 1px solid #ddd;
+    padding: 15px;
+    width: 100%;
+    max-width: 360px;
+    background: white;
+}
+
+
+/* Keep product cards full width inside grid cells */
+.product-card{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 /* HERO */
 .hero {
     position: relative;
     height: 500px;
-    background: url('dress-bg.jpg') no-repeat center center/cover;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -148,6 +187,13 @@ button {
     color: white;
     border-radius: 5px;
     cursor: pointer;
+}
+
+/* Avoid unintended centering on login pages */
+.login-container button,
+.login-box button {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
 /* FEATURES */
@@ -517,6 +563,19 @@ button {
     padding: 10px;
     background: #111;
 }
+
+/* Seller dashboard: full-width footer (desktop + all breakpoints) */
+.seller-dashboard-footer-wrap{
+    width: 100%;
+    display: block;
+    margin-top: 40px;
+}
+
+.seller-dashboard-footer-wrap > .footer{
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
 /* SELLER BUTTON */
 .seller-btn{
     text-decoration:none;
@@ -543,10 +602,10 @@ button {
     height:100vh;
 
     display:flex;
-    justify-content:flex-start;
-    align-items:flex-start;
+    justify-content:center; /* center horizontally */
+    align-items:center; /* center vertically */
 
-    padding-top:100px;
+    padding-top:0;
 
     background:linear-gradient(to right,#f5f7fa,#d7e1ec);
 }
@@ -694,4 +753,26 @@ button {
 .seller-btn{
     background: white;
     color: black;
+}
+
+/* ==============================
+   PRODUCTS GRID OVERRIDES
+   (Force rows & columns layout)
+   ============================== */
+.products{
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+    gap: 16px !important;
+    align-items: start !important;
+    justify-items: center !important;
+    width: 100% !important;
+    padding: 40px 20px !important;
+    margin: 0 !important;
+}
+
+.product-card{
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
 }

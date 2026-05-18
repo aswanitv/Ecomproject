@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Black Sequin Dress - Shopuniverse</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Loose Fit Maxi Dress - Shopuniverse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
@@ -10,7 +10,7 @@
 <div class="navbar">
 
     <div class="logo">
-        <img src="Gemini_Generated_Image_k8m5q9k8m5q9k8m5.png">
+        <img src="{{ url_for('static', filename='logo3.jpg')}}">
     </div>
 
     <div class="nav-links">
@@ -36,24 +36,23 @@
 <div class="product-details">
 
     <div class="product-image">
-        <img src="blck.jpeg" alt="Black Sequin Dress">
+        <img src="{{ url_for('static', filename='img/fourth.jpeg') }}" alt="Loose Fit Maxi Dress">
     </div>
 
     <div class="product-info">
-        <h1>Black Sequin Dress</h1>
-        <p class="price">₹1999</p>
+        <h1>Loose Fit Maxi Dress</h1>
+        <p class="price">₹999</p>
 
         <p class="description">
-            Shine with confidence in this glamorous black sequin dress.
-            Designed for night parties and special events, it adds sparkle
-            and elegance to your overall look.
+            Enjoy effortless elegance with this loose fit maxi dress. 
+            Designed for comfort and flow, it’s perfect for casual outings, vacations, and relaxed evenings.
         </p>
 
         <ul>
-            <li>✔ Premium sequin fabric</li>
-            <li>✔ Eye-catching sparkle design</li>
-            <li>✔ Perfect for night parties & events</li>
-            <li>✔ Stylish and comfortable fit</li>
+            <li>✔ Flowing and relaxed fit</li>
+            <li>✔ Lightweight and breathable fabric</li>
+            <li>✔ Stylish long-length design</li>
+            <li>✔ Perfect for all-day comfort</li>
         </ul>
 
         <button>Add to Cart</button>

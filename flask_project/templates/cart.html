@@ -2,23 +2,50 @@
 <html>
 <head>
     <title>My Cart - Shopuniverse</title>
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+    /* Delete button aligned bottom-right inside each cart card */
+    #cart-items .cart-item{
+        position: relative;
+    }
+    #cart-items .cart-delete-btn{
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: #ff4d4d;
+        border: none;
+        color: white;
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+</style>
 </head>
 <body>
 
+
 <div class="navbar">
+
     <div class="logo">
-        <img src="Gemini_Generated_Image_p49shtp49shtp49s.png">
+<img src="{{ url_for('static', filename='logo3.jpg') }}">
     </div>
 
     <div class="nav-links">
-        <a href="index.html">Home</a>
+<a href="{{ url_for('index') }}">Home</a>
     </div>
 </div>
 
 <h1 style="text-align:center; margin-top:20px;">My Cart</h1>
 
-<div id="cart-items" style="padding:20px;"></div>
+<!-- spacing below navbar -->
+<div id="cart-items" style="padding:20px; margin-top:30px;"></div>
 
 <script>
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -27,16 +54,45 @@ let container = document.getElementById("cart-items");
 if(cart.length === 0){
     container.innerHTML = "<p style='text-align:center;'>Your cart is empty</p>";
 } else {
-    cart.forEach(item => {
+    cart.forEach((item, idx) => {
         container.innerHTML += `
-            <div style="border:1px solid #ddd; padding:15px; margin:10px;">
-                <img src="${item.image}" width="100">
+            <div class="cart-item product-card">
+                <button class="cart-delete-btn" aria-label="Delete ${item.name}" onclick="removeFromCart(${idx});">✕</button>
+                <img src="${item.image}" alt="${item.name}" width="100">
                 <h3>${item.name}</h3>
                 <p>₹${item.price}</p>
             </div>
         `;
     });
 }
+function removeFromCart(index){
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+}
+
+function renderCart(){
+    let container = document.getElementById("cart-items");
+    container.innerHTML = "";
+
+    if(cart.length === 0){
+        container.innerHTML = "<p style='text-align:center;'>Your cart is empty</p>";
+        return;
+    }
+
+    cart.forEach((item, idx) => {
+        container.innerHTML += `
+            <div class="cart-item product-card">
+                <button class="cart-delete-btn" aria-label="Delete ${item.name}" onclick="removeFromCart(${idx});">✕</button>
+                <img src="${item.image}" alt="${item.name}" width="100">
+                <h3>${item.name}</h3>
+                <p>₹${item.price}</p>
+            </div>
+        `;
+    });
+}
+
+renderCart();
 </script>
 
 </body>

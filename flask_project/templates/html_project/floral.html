@@ -1,67 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Elegant Evening Gown - Shopuniverse</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Floral Summer Dress - Shopuniverse</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <!-- NAVBAR -->
 <div class="navbar">
-
     <div class="logo">
-        <img src="Gemini_Generated_Image_k8m5q9k8m5q9k8m5.png">
+        <img src="{{ url_for('static', filename='logo3.jpg') }}" alt="Shopuniverse logo">
     </div>
 
     <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-
-        <div class="dropdown">
-            <a href="#">Dresses &#9662;</a>
-            <div class="dropdown-content">
-                <a href="casual.html">Casual Wear</a>
-                <a href="party.html">Party Wear</a>
-                <a href="ethnic.html">Ethnic Wear</a>
-            </div>
-        </div>
-
-        <a href="contact.html">Contact</a>
+        <a href="/">Home</a>
+        <a href="casual.html">Back to Casual Wear</a>
     </div>
-
-    <a href="login.html" class="login-btn">Login</a>
 </div>
+
+<div style="height:70px;"></div>
+
 
 <!-- PRODUCT DETAILS -->
 <div class="product-details">
 
+    <!-- IMAGE -->
     <div class="product-image">
-        <img src="eleg.jpeg" alt="Elegant Evening Gown">
+        <img src="{{ url_for('static', filename='img/frst.jpeg') }}" alt="Floral Summer Dress">
     </div>
 
+    <!-- INFO -->
     <div class="product-info">
-        <h1>Elegant Evening Gown</h1>
-        <p class="price">₹1899</p>
+        <h1>Floral Summer Dress</h1>
+        <p class="price">₹799</p>
 
         <p class="description">
-            Step into elegance with this stunning evening gown, designed for parties,
-            weddings, and special occasions. Its premium fabric and modern design
-            give you a graceful and classy look.
+            Stay fresh and stylish with this beautiful floral summer dress.
+            Designed with soft cotton fabric and vibrant prints, it is perfect
+            for daily wear, college, outings, and summer vacations.
         </p>
 
+        <!-- FEATURES -->
+        <h3>Product Highlights:</h3>
         <ul>
-            <li>✔ Premium quality fabric</li>
-            <li>✔ Elegant long-length design</li>
-            <li>✔ Perfect for parties and events</li>
-            <li>✔ Comfortable and stylish fit</li>
+            <li>✔ Soft and breathable cotton fabric</li>
+            <li>✔ Lightweight and comfortable</li>
+            <li>✔ Elegant floral print design</li>
+            <li>✔ Perfect for summer and casual wear</li>
+            <li>✔ Easy to wash and maintain</li>
         </ul>
 
+        <!-- SIZE -->
+        <h3>Available Sizes:</h3>
+        <p>S | M | L | XL</p>
+
+        <!-- COLORS -->
+        <h3>Available Colors:</h3>
+        <p>Pink Floral | Blue Floral | Yellow Floral</p>
+
+        <!-- DELIVERY -->
+        <h3>Delivery & Offers:</h3>
+        <p>✔ Free delivery on orders above ₹999</p>
+        <p>✔ Cash on Delivery available</p>
+        <p>✔ 7-day easy return policy</p>
+
+        <!-- RATING -->
+        <h3>Customer Rating:</h3>
+        <p>⭐⭐⭐⭐☆ (4.2/5 based on 120 reviews)</p>
+
+        <!-- BUTTONS -->
         <button>Add to Cart</button>
         <button class="buy-btn">Buy Now</button>
+
+        <!-- BACK BUTTON -->
+        <br><br>
+        <a href="casual.html" class="back-btn">⬅ Back to Casual Wear</a>
     </div>
 
 </div>
 
+<!-- FOOTER -->
 <div class="footer">
 
     <div class="footer-top">
@@ -123,6 +141,3 @@
 
 </body>
 </html>
-
-
-

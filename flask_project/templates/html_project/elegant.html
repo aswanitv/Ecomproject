@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Shimmer Party Dress - Shopuniverse</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Elegant Evening Gown - Shopuniverse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
@@ -10,7 +10,7 @@
 <div class="navbar">
 
     <div class="logo">
-        <img src="Gemini_Generated_Image_k8m5q9k8m5q9k8m5.png">
+        <img src="{{ url_for('static', filename='logo3.jpg')}}">
     </div>
 
     <div class="nav-links">
@@ -36,24 +36,24 @@
 <div class="product-details">
 
     <div class="product-image">
-        <img src="shim.jpeg" alt="Shimmer Party Dress">
+        <img src="{{ url_for('static', filename='img/eleg.jpeg') }}" alt="Elegant Evening Gown">
     </div>
 
     <div class="product-info">
-        <h1>Shimmer Party Dress</h1>
-        <p class="price">₹1599</p>
+        <h1>Elegant Evening Gown</h1>
+        <p class="price">₹1899</p>
 
         <p class="description">
-            Shine bright at every event with this stunning shimmer party dress.
-            Designed to catch the light and attention, it’s perfect for night parties,
-            celebrations, and special occasions.
+            Step into elegance with this stunning evening gown, designed for parties,
+            weddings, and special occasions. Its premium fabric and modern design
+            give you a graceful and classy look.
         </p>
 
         <ul>
-            <li>✔ Eye-catching shimmer fabric</li>
-            <li>✔ Perfect for night parties and events</li>
-            <li>✔ Stylish and modern fit</li>
-            <li>✔ Comfortable for long wear</li>
+            <li>✔ Premium quality fabric</li>
+            <li>✔ Elegant long-length design</li>
+            <li>✔ Perfect for parties and events</li>
+            <li>✔ Comfortable and stylish fit</li>
         </ul>
 
         <button>Add to Cart</button>

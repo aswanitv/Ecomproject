@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Anarkali Dress - Shopuniverse</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Saree Collection - Shopuniverse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <!-- NAVBAR -->
 <div class="navbar">
     <div class="logo">
-        <img src="Gemini_Generated_Image_k8m5q9k8m5q9k8m5.png">
+        <img src="{{ url_for('static', filename='logo3.jpg')}}">
     </div>
 
     <div class="nav-links">
@@ -36,39 +36,42 @@
 
     <!-- IMAGE -->
     <div class="product-image">
-        <img src="anar.jpeg" alt="Anarkali Dress">
+        <img src="{{ url_for('static', filename='img/saree.jpeg') }}" alt="Saree Collection">
     </div>
 
     <!-- INFO -->
     <div class="product-info">
-        <h1>Anarkali Dress</h1>
-        <p class="price">₹1499</p>
+        <h1>Saree Collection</h1>
+        <p class="price">₹1999</p>
 
         <p class="description">
-            Elevate your ethnic style with this beautifully designed Anarkali dress.
-            Crafted with premium fabric, it offers a royal look with maximum comfort.
-            Perfect for weddings, festivals, and special occasions.
+            Discover elegance with our premium saree collection, designed to
+            bring out traditional beauty with a modern touch. Perfect for
+            weddings, festivals, and special occasions.
         </p>
 
         <ul>
-            <li>✔ Premium soft fabric</li>
-            <li>✔ Full-length elegant design</li>
-            <li>✔ Ideal for weddings & festive wear</li>
-            <li>✔ Comfortable and breathable</li>
+            <li>✔ High-quality silk & chiffon fabrics</li>
+            <li>✔ Beautiful prints and embroidery</li>
+            <li>✔ Lightweight and comfortable to wear</li>
+            <li>✔ Perfect for festive & traditional events</li>
         </ul>
 
-        <h3>Available Sizes:</h3>
-        <p>S | M | L | XL</p>
+        <h3>Available Colors:</h3>
+        <p>Red | Blue | Green | Gold | Black</p>
+
+        <h3>Fabric Type:</h3>
+        <p>Silk | Cotton | Chiffon</p>
+
+        <h3>Product Includes:</h3>
+        <p>Saree + Blouse Piece</p>
 
         <button>Add to Cart</button>
         <button class="buy-btn">Buy Now</button>
     </div>
 
 </div>
- Shopuniverse</p>
-    </div>
 
-</div> 
 <div class="footer">
 
     <div class="footer-top">

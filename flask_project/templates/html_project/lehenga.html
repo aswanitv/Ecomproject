@@ -2,14 +2,14 @@
 <html>
 <head>
     <title>Lehenga Choli - Shopuniverse</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <!-- NAVBAR -->
 <div class="navbar">
     <div class="logo">
-        <img src="Gemini_Generated_Image_k8m5q9k8m5q9k8m5.png">
+        <img src="{{ url_for('static', filename='logo3.jpg')}}">
     </div>
 
     <div class="nav-links">
@@ -36,7 +36,7 @@
 
     <!-- IMAGE -->
     <div class="product-image">
-        <img src="lehanga.jpeg" alt="Lehenga Choli">
+        <img src="{{ url_for('static', filename='img/lehanga.jpeg') }}" alt="Lehenga Choli">
     </div>
 
     <!-- INFO -->

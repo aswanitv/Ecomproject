@@ -87,7 +87,21 @@ def customer_login_required():
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    # Featured products should be visible to everyone (no seller login required).
+    conn = get_db_connection()
+    try:
+        products = conn.execute(
+            """
+            SELECT id, name, price, description, image_url, created_at
+            FROM products
+            ORDER BY datetime(created_at) DESC, id DESC
+            LIMIT 12
+            """
+        ).fetchall()
+    finally:
+        conn.close()
+
+    return render_template("index.html", products=products)
 
 
 @app.route("/index")
@@ -107,6 +121,9 @@ def contact():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if customer_login_required():
+        return redirect(url_for("index"))
+
     if request.method == "POST":
         username = (request.form.get("username") or "").strip()
         password = request.form.get("password") or ""
@@ -119,7 +136,7 @@ def login():
 
         if row is None or not check_password_hash(row["password_hash"], password):
             flash("Invalid username or password.", "login_error")
-            return redirect(url_for("login"))
+            return redirect(url_for("index"))
 
         session["user_id"] = row["id"]
         session["username"] = row["username"]
@@ -339,6 +356,105 @@ def seller_logout():
     return redirect(url_for("seller_login"))
 
 
+@app.route("/seller/edit_product", methods=["POST"])
+def seller_edit_product():
+    if not seller_login_required():
+        flash("Please login to edit products.", "seller_error")
+        return redirect(url_for("seller_login"))
+
+    product_id_raw = (request.form.get("product_id") or "").strip()
+    name = (request.form.get("name") or "").strip()
+    price_raw = (request.form.get("price") or "").strip()
+    description = (request.form.get("description") or "").strip()
+    image_url = (request.form.get("image_url") or "").strip()
+
+    if not product_id_raw.isdigit():
+        flash("Invalid product id.", "seller_error")
+        return redirect(url_for("seller_dashboard"))
+
+    if not name:
+        flash("Product name is required.", "seller_error")
+        return redirect(url_for("seller_dashboard"))
+
+    try:
+        price = float(price_raw) if price_raw else 0.0
+    except ValueError:
+        flash("Invalid price.", "seller_error")
+        return redirect(url_for("seller_dashboard"))
+
+    product_id = int(product_id_raw)
+
+    conn = get_db_connection()
+    try:
+        # Ensure the product belongs to this seller
+        existing = conn.execute(
+            "SELECT id FROM products WHERE id = ? AND seller_id = ?",
+            (product_id, session.get("seller_id")),
+        ).fetchone()
+
+        if existing is None:
+            flash("Product not found.", "seller_error")
+            return redirect(url_for("seller_dashboard"))
+
+        conn.execute(
+            """
+            UPDATE products
+            SET name = ?, price = ?, description = ?, image_url = ?
+            WHERE id = ? AND seller_id = ?
+            """,
+            (
+                name,
+                price,
+                description if description else None,
+                image_url if image_url else None,
+                product_id,
+                session.get("seller_id"),
+            ),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    flash("Product updated successfully.", "seller_success")
+    return redirect(url_for("seller_dashboard"))
+
+
+@app.route("/seller/delete_product", methods=["POST"])
+def seller_delete_product():
+    if not seller_login_required():
+        flash("Please login to delete products.", "seller_error")
+        return redirect(url_for("seller_login"))
+
+    product_id_raw = (request.form.get("product_id") or "").strip()
+    if not product_id_raw.isdigit():
+        flash("Invalid product id.", "seller_error")
+        return redirect(url_for("seller_dashboard"))
+
+    product_id = int(product_id_raw)
+
+    conn = get_db_connection()
+    try:
+        existing = conn.execute(
+            "SELECT id FROM products WHERE id = ? AND seller_id = ?",
+            (product_id, session.get("seller_id")),
+        ).fetchone()
+
+        if existing is None:
+            flash("Product not found.", "seller_error")
+            return redirect(url_for("seller_dashboard"))
+
+        conn.execute(
+            "DELETE FROM products WHERE id = ? AND seller_id = ?",
+            (product_id, session.get("seller_id")),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    flash("Product deleted successfully.", "seller_success")
+    return redirect(url_for("seller_dashboard"))
+
+
 @app.route("/casual")
 def casual():
     return render_template("casual.html")
@@ -354,6 +470,29 @@ def ethnic():
     return render_template("ethnic.html")
 
 
+# --- Product detail pages (wired for redirects from product cards) ---
+
+@app.route("/floral")
+def floral_details():
+    return render_template("html_project/floral.html")
+
+
+@app.route("/denim")
+def denim_details():
+    return render_template("html_project/denim.html")
+
+
+@app.route("/cotton")
+def cotton_details():
+    return render_template("html_project/cotton.html")
+
+
+@app.route("/loose")
+def loose_details():
+    return render_template("html_project/loose.html")
+
+
+
 if __name__ == "__main__":
     init_db()
-    app.run(debug=True)
+    app.run(debug=True, port=8001)

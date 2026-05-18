@@ -1,36 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Ethnic Wear - Shopuniverse</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+{% extends 'base.html' %}
 
-<!-- NAVBAR -->
-<div class="navbar">
+{% block title %}Ethnic Wear - Shopuniverse{% endblock %}
 
-    <div class="logo">
-        <img src="Gemini_Generated_Image_k8m5q9k8m5q9k8m5.png">
-    </div>
-
-    <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-
-        <div class="dropdown">
-            <a href="#">Dresses &#9662;</a>
-            <div class="dropdown-content">
-                <a href="casual.html">Casual Wear</a>
-                <a href="party.html">Party Wear</a>
-                <a href="ethnic.html">Ethnic Wear</a>
-            </div>
-        </div>
-
-        <a href="contact.html">Contact</a>
-    </div>
-
-    <a href="login.html" class="login-btn">Login</a>
-</div>
+{% block content %}
 
 <!-- HERO -->
 <div class="hero">
@@ -43,7 +15,7 @@
 
     <!-- Anarkali -->
     <div class="product-card">
-        <img src="anar.jpeg" alt="Anarkali Dress">
+        <img src="{{ url_for('static', filename='img/anar.jpeg') }}" alt="Anarkali Dress">
         <h3><a href="anarkali.html">Anarkali Dress</a></h3>
         <p>₹1499</p>
         <p>Elegant Anarkali for festive occasions.</p>
@@ -52,7 +24,7 @@
 
     <!-- Kurti -->
     <div class="product-card">
-        <img src="kurti.jpeg" alt="Kurti Set">
+        <img src="{{ url_for('static', filename='img/kurti.jpeg') }}" alt="Kurti Set">
         <h3><a href="kurti.html">Kurti Set</a></h3>
         <p>₹999</p>
         <p>Comfortable kurti set for daily wear.</p>
@@ -61,7 +33,7 @@
 
     <!-- Lehenga -->
     <div class="product-card">
-        <img src="lehanga.jpeg" alt="Lehenga Choli">
+        <img src="{{ url_for('static', filename='img/lehanga.jpeg') }}" alt="Lehenga Choli">
         <h3><a href="lehenga.html">Lehenga Choli</a></h3>
         <p>₹2499</p>
         <p>Traditional lehenga perfect for weddings.</p>
@@ -70,7 +42,7 @@
 
     <!-- Saree -->
     <div class="product-card">
-        <img src="saree.jpeg" alt="Saree">
+        <img src="{{ url_for('static', filename='img/saree.jpeg') }}" alt="Saree">
         <h3><a href="saree.html">Saree Collection</a></h3>
         <p>₹1999</p>
         <p>Stylish saree with modern design.</p>
@@ -78,64 +50,5 @@
     </div>
 
 </div>
-<div class="footer">
 
-    <div class="footer-top">
-        <a href="#">Back to top</a>
-    </div>
-
-    <div class="footer-content">
-
-        <!-- Column 1 -->
-        <div class="footer-column">
-            <h3>Shopuniverse</h3>
-            <a href="about.html">About Us</a>
-            <a href="#">Careers</a>
-            <a href="#">Blog</a>
-        </div>
-
-        <!-- Column 2 -->
-        <div class="footer-column">
-            <h3>Help</h3>
-            <a href="#">Customer Support</a>
-            <a href="#">FAQs</a>
-            <a href="#">Shipping Info</a>
-            <a href="#">Returns & Refunds</a>
-        </div>
-
-        <!-- Column 3 -->
-        <div class="footer-column">
-            <h3>Categories</h3>
-            <a href="casual.html">Casual Wear</a>
-            <a href="party.html">Party Wear</a>
-            <a href="ethnic.html">Ethnic Wear</a>
-        </div>
-
-        <!-- Column 4 -->
-        <div class="footer-column">
-            <h3>Policies</h3>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms & Conditions</a>
-            <a href="#">Return Policy</a>
-        </div>
-
-        <!-- Column 5 -->
-        <div class="footer-column">
-            <h3>Connect</h3>
-            <a href="#">Instagram</a>
-            <a href="#">Facebook</a>
-            <a href="#">Twitter</a>
-            <a href="#">Email Us</a>
-        </div>
-
-    </div>
-
-    <!-- Bottom -->
-    <div class="footer-bottom">
-        <p>&copy; 2026 Shopuniverse | All Rights Reserved</p>
-    </div>
-
-</div>
-
-</body>
-</html>
+{% endblock %}

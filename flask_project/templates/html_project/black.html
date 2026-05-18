@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cotton Daily Wear - Shopuniverse</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Black Sequin Dress - Shopuniverse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
@@ -10,7 +10,7 @@
 <div class="navbar">
 
     <div class="logo">
-        <img src="Gemini_Generated_Image_k8m5q9k8m5q9k8m5.png">
+        <img src="{{ url_for('static', filename='logo3.jpg')}}">
     </div>
 
     <div class="nav-links">
@@ -36,23 +36,24 @@
 <div class="product-details">
 
     <div class="product-image">
-        <img src="third.jpeg" alt="Cotton Daily Wear">
+        <img src="{{ url_for('static', filename='img/blck.jpeg') }}" alt="Black Sequin Dress">
     </div>
 
     <div class="product-info">
-        <h1>Cotton Daily Wear</h1>
-        <p class="price">₹699</p>
+        <h1>Black Sequin Dress</h1>
+        <p class="price">₹1999</p>
 
         <p class="description">
-            Experience all-day comfort with this soft cotton daily wear dress. 
-            Perfect for regular use, office wear, and relaxed outings.
+            Shine with confidence in this glamorous black sequin dress.
+            Designed for night parties and special events, it adds sparkle
+            and elegance to your overall look.
         </p>
 
         <ul>
-            <li>✔ 100% pure cotton fabric</li>
-            <li>✔ Soft, breathable, and skin-friendly</li>
-            <li>✔ Ideal for hot weather</li>
-            <li>✔ Simple and elegant design</li>
+            <li>✔ Premium sequin fabric</li>
+            <li>✔ Eye-catching sparkle design</li>
+            <li>✔ Perfect for night parties & events</li>
+            <li>✔ Stylish and comfortable fit</li>
         </ul>
 
         <button>Add to Cart</button>
