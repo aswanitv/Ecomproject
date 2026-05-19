@@ -14,23 +14,25 @@
     </div>
 
     <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
 
         <div class="dropdown">
             <a href="#">Dresses &#9662;</a>
             <div class="dropdown-content">
-                <a href="casual.html">Casual Wear</a>
-                <a href="party.html">Party Wear</a>
-                <a href="ethnic.html">Ethnic Wear</a>
+                <a href="{{ url_for('casual') }}">Casual Wear</a>
+                <a href="{{ url_for('party') }}">Party Wear</a>
+                <a href="{{ url_for('ethnic') }}">Ethnic Wear</a>
             </div>
         </div>
 
-        <a href="contact.html">Contact</a>
+        <a href="{{ url_for('contact') }}">Contact</a>
     </div>
 
     <a href="login.html" class="login-btn">Login</a>
 </div>
+
+<div style="height:80px;"></div>
 
 <!-- PRODUCT DETAILS -->
 <div class="product-details">
@@ -43,12 +45,6 @@
         <h1>Black Sequin Dress</h1>
         <p class="price">₹1999</p>
 
-        <p class="description">
-            Shine with confidence in this glamorous black sequin dress.
-            Designed for night parties and special events, it adds sparkle
-            and elegance to your overall look.
-        </p>
-
         <ul>
             <li>✔ Premium sequin fabric</li>
             <li>✔ Eye-catching sparkle design</li>
@@ -56,8 +52,7 @@
             <li>✔ Stylish and comfortable fit</li>
         </ul>
 
-        <button>Add to Cart</button>
-        <button class="buy-btn">Buy Now</button>
+        <button class="buy-btn" onclick="window.location.href='/checkout?product_name=' + encodeURIComponent('Black Sequin Dress') + '&product_price=' + encodeURIComponent('1999') + '&product_details=' + encodeURIComponent('Shine with confidence in this glamorous black sequin dress. Designed for night parties and special events, it adds sparkle and elegance to your overall look.') + '&product_image=' + encodeURIComponent('/static/img/blck.jpeg');">Buy Now</button>
     </div>
 
 </div>
@@ -123,6 +118,4 @@
 
 </body>
 </html>
-
-
 

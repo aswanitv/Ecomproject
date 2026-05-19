@@ -14,23 +14,25 @@
     </div>
 
     <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
 
         <div class="dropdown">
             <a href="#">Dresses &#9662;</a>
             <div class="dropdown-content">
-                <a href="casual.html">Casual Wear</a>
-                <a href="party.html">Party Wear</a>
-                <a href="ethnic.html">Ethnic Wear</a>
+                <a href="{{ url_for('casual') }}">Casual Wear</a>
+                <a href="{{ url_for('party') }}">Party Wear</a>
+                <a href="{{ url_for('ethnic') }}">Ethnic Wear</a>
             </div>
         </div>
 
-        <a href="contact.html">Contact</a>
+        <a href="{{ url_for('contact') }}">Contact</a>
     </div>
 
     <a href="login.html" class="login-btn">Login</a>
 </div>
+
+<div style="height:80px;"></div>
 
 <!-- PRODUCT DETAILS -->
 <div class="product-details">
@@ -56,8 +58,9 @@
             <li>✔ Comfortable for long wear</li>
         </ul>
 
-        <button>Add to Cart</button>
-        <button class="buy-btn">Buy Now</button>
+        <button class="buy-btn" onclick="window.location.href='/checkout?product_name=' + encodeURIComponent('Shimmer Party Dress') + '&product_price=' + encodeURIComponent('1599') + '&product_details=' + encodeURIComponent('Shine bright at every event with this stunning shimmer party dress. Designed to catch the light and attention, it’s perfect for night parties, celebrations, and special occasions.') + '&product_image=' + encodeURIComponent('/static/img/shim.jpeg');">Buy Now</button>
+
+
     </div>
 
 </div>

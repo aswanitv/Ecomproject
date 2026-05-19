@@ -13,19 +13,19 @@
     </div>
 
     <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
 
         <div class="dropdown">
             <a href="#">Dresses &#9662;</a>
             <div class="dropdown-content">
-                <a href="casual.html">Casual Wear</a>
-                <a href="party.html">Party Wear</a>
-                <a href="ethnic.html">Ethnic Wear</a>
+                <a href="{{ url_for('casual') }}">Casual Wear</a>
+                <a href="{{ url_for('party') }}">Party Wear</a>
+                <a href="{{ url_for('ethnic') }}">Ethnic Wear</a>
             </div>
         </div>
 
-        <a href="contact.html">Contact</a>
+        <a href="{{ url_for('contact') }}">Contact</a>
     </div>
 
     <a href="login.html" class="login-btn">Login</a>
@@ -66,11 +66,12 @@
         <h3>Product Includes:</h3>
         <p>Lehenga + Choli + Dupatta</p>
 
-        <button>Add to Cart</button>
-        <button class="buy-btn">Buy Now</button>
+        <button class="buy-btn" onclick="window.location.href='/checkout?product_name=' + encodeURIComponent('Lehenga Choli') + '&product_price=' + encodeURIComponent('2499') + '&product_details=' + encodeURIComponent('Make a grand statement with this beautifully designed lehenga choli. Crafted with rich fabric and detailed embroidery, it is perfect for weddings, festive celebrations, and special occasions.') + '&product_image=' + encodeURIComponent('/static/img/lehanga.jpeg');">Buy Now</button>
     </div>
 
 </div>
+
+<div style="height:80px;"></div>
 
 <div class="footer">
 

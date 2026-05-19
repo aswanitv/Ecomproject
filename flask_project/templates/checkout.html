@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout - Shopuniverse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .checkout-summary{
+            max-width: 980px;
+            margin: 20px auto 0;
+            padding: 0 16px;
+        }
+        .checkout-card{
+            background: #ffffff;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .product-mini{
+            display:flex;
+            gap:16px;
+            align-items:flex-start;
+        }
+        .product-mini img{
+            width: 110px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .checkout-grid{
+            display:flex;
+            gap:16px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+        .checkout-left{ flex: 1; min-width: 320px; }
+        .checkout-right{ width: 360px; max-width: 100%; }
+
+        /* Bottom-right continue button */
+        .continue-wrap{
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 999;
+        }
+        .continue-wrap a, .continue-wrap button{
+            background: #15c9f6;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .continue-wrap button:disabled{
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        label{ display:block; font-weight: bold; margin: 10px 0 6px; }
+        input, textarea{
+            width: 100%;
+            padding: 12px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+        textarea{ min-height: 96px; resize: vertical; }
+        .error{ color: #ff4d4d; font-size: 13px; margin-top: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">
+        <img src="{{ url_for('static', filename='logo3.jpg') }}" alt="Shopuniverse logo">
+    </div>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="{{ url_for('cart') }}">Back to Cart</a>
+    </div>
+</div>
+
+<h1 style="text-align:center; margin-top:20px;">Checkout</h1>
+
+<div class="checkout-summary">
+    <div class="checkout-grid">
+        <div class="checkout-left">
+            <div class="checkout-card">
+                <h2 style="margin-bottom:10px;">Shipping Address</h2>
+
+        <form method="POST" action="{{ url_for('checkout') }}">
+                    <input type="hidden" name="product_name" value="{{ product_name|e }}">
+                    <input type="hidden" name="product_price" value="{{ product_price|e }}">
+                    <input type="hidden" name="product_details" value="{{ product_details|e }}">
+                    <input type="hidden" name="product_image" value="{{ product_image|e }}">
+
+                    <label>Full Name</label>
+                    <input name="full_name" required value="{{ full_name|default('') }}" />
+
+
+                    <label>Phone</label>
+                    <input name="phone" required value="{{ phone|default('') }}" />
+
+                    <label>Address</label>
+                    <textarea name="address" required>{{ address|default('') }}</textarea>
+
+                    <label>City</label>
+                    <input name="city" required value="{{ city|default('') }}" />
+
+                    <label>State</label>
+                    <input name="state" required value="{{ state|default('') }}" />
+
+                    <label>Pin Code</label>
+                    <input name="pin_code" required value="{{ pin_code|default('') }}" />
+
+                    <!-- We don't place the submit button here; Continue button is bottom-right -->
+                    <button type="submit" style="display:none;">Submit</button>
+                </form>
+
+            </div>
+        </div>
+
+        <div class="checkout-right">
+            <div class="checkout-card">
+                <h2 style="margin-bottom:10px;">Order Summary</h2>
+                <div class="product-mini">
+                    {% if product_image %}
+                    <img src="{{ product_image }}" alt="{{ product_name }}">
+                    {% endif %}
+                    <div>
+                        <h3 style="margin:0 0 6px 0;">{{ product_name }}</h3>
+                        <p style="margin:0; font-weight:bold; color: green; font-size: 18px;">₹{{ product_price }}</p>
+                        <p style="margin: 8px 0 0 0; color:#555;">{{ product_details }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="continue-wrap">
+    <button type="button" onclick="document.querySelector('form').requestSubmit()">Continue</button>
+</div>
+
+<script>
+    // After the shipping form is submitted (POST /checkout), the backend redirects to /cart.
+    // We'll navigate to payment-methods page when user returns from cart.
+</script>
+
+
+</body>
+</html>
+

@@ -16,41 +16,38 @@
     <!-- Dress 1 -->
     <div class="product-card">
         <img src="{{ url_for('static', filename='img/eleg.jpeg') }}" alt="Evening Gown">
-        <h3><a href="elegant.html">Elegant Evening Gown</a></h3>
+
+        <h3><a href="{{ url_for('elegant_details') }}">Elegant Evening Gown</a></h3>
+
         <p>₹1899</p>
         <p>Perfect for parties with a classy elegant look.</p>
-        <button>Add to Cart</button>
     </div>
 
     <!-- Dress 2 -->
     <div class="product-card">
         <img src="{{ url_for('static', filename='img/shim.jpeg') }}" alt="Shimmer Dress">
-        <h3><a href="shimmer.html">Shimmer Party Dress</a></h3>
+        <h3><a href="{{ url_for('shimmer_details') }}">Shimmer Party Dress</a></h3>
+
         <p>₹1599</p>
         <p>Trendy shimmer dress for night events.</p>
-        <button>Add to Cart</button>
     </div>
 
     <!-- Dress 3 -->
     <div class="product-card">
         <img src="{{ url_for('static', filename='img/red.jpeg') }}" alt="Red Satin Dress">
-        <h3><a href="red.html">Red Satin Party Dress</a></h3>
+        <h3><a href="{{ url_for('red_details') }}">Red Satin Party Dress</a></h3>
         <p>₹1799</p>
         <p>Elegant satin dress with a bold and stylish look.</p>
-        <button>Add to Cart</button>
     </div>
 
     <!-- Dress 4 -->
     <div class="product-card">
         <img src="{{ url_for('static', filename='img/blck.jpeg') }}" alt="Black Sequin Dress">
-        <h3><a href="black.html">Black Sequin Dress</a></h3>
+        <h3><a href="{{ url_for('black_details') }}">Black Sequin Dress</a></h3>
         <p>₹1999</p>
         <p>Glamorous sequin dress perfect for night parties.</p>
-        <button>Add to Cart</button>
     </div>
 
 </div>
 
 {% endblock %}
-
-

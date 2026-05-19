@@ -17,7 +17,6 @@
         <img src="{{ url_for('static', filename='img/frst.jpeg') }}" alt="Floral">
         <h3><a href="/floral">Floral Summer Dress</a></h3>
         <p>₹799</p>
-        <button type="button" onclick="event.stopPropagation();">Add to Cart</button>
     </div>
 
 
@@ -26,21 +25,18 @@
         <img src="{{ url_for('static', filename='img/scnd.jpeg') }}" alt="denim">
         <h3><a href="{{ url_for('denim_details') }}">Denim Casual Dress</a></h3>
         <p>₹1199</p>
-        <button type="button" onclick="event.stopPropagation();">Add to Cart</button>
     </div>
 
     <div class="product-card" onclick="window.location.href='{{ url_for('cotton_details') }}'" role="link" tabindex="0">
         <img src="{{ url_for('static', filename='img/third.jpeg') }}" alt="Cotton">
         <h3><a href="{{ url_for('cotton_details') }}"> Cotton Daily Wear</a></h3>
         <p>₹699</p>
-        <button type="button" onclick="event.stopPropagation();">Add to Cart</button>
     </div>
 
     <div class="product-card" onclick="window.location.href='{{ url_for('loose_details') }}'" role="link" tabindex="0">
         <img src="{{ url_for('static', filename='img/fourth.jpeg') }}" alt="Loose">
         <h3><a href="{{ url_for('loose_details') }}">Loose Fit Maxi Dress</a></h3>
         <p>₹999</p>
-        <button type="button" onclick="event.stopPropagation();">Add to Cart</button>
     </div>
 
 

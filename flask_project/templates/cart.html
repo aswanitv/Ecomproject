@@ -47,24 +47,59 @@
 <!-- spacing below navbar -->
 <div id="cart-items" style="padding:20px; margin-top:30px;"></div>
 
+<!-- TOTAL SECTION -->
+<div style="max-width:980px; margin:20px auto 40px; padding:0 16px;">
+    <div style="display:flex; justify-content:flex-start; align-items:flex-end;">
+        <div style="width:100%; max-width:360px; margin-left:0;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-radius:12px; background:#87cefa; border:1px solid rgba(0,0,0,0.08);">
+                <strong>Total</strong>
+                <strong id="cart-total">₹0</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// Map product names (or category hint) to local detail pages
+function getDetailUrlForItem(item){
+    // If cart items were stored with a direct url, keep it.
+    if(item && item.detail_url) return item.detail_url;
+
+    const name = (item.name || '').toLowerCase();
+    // Try to infer category by keywords in the name
+    if(name.includes('floral')) return '/floral';
+    if(name.includes('denim')) return '/denim';
+    if(name.includes('cotton')) return '/cotton';
+    if(name.includes('loose')) return '/loose';
+    if(name.includes('saree')) return '/saree';
+    if(name.includes('party')) return '/party';
+    if(name.includes('shimmer')) return '/shimmer';
+
+    // Fallback: allow cart items to provide a detail_url
+    return item.detail_url || '#';
+}
+
+// Ensure cart items have a detail_url so the UI can redirect
+cart = cart.map(item => ({
+    ...item,
+    detail_url: getDetailUrlForItem(item)
+}));
 let container = document.getElementById("cart-items");
 
-if(cart.length === 0){
-    container.innerHTML = "<p style='text-align:center;'>Your cart is empty</p>";
-} else {
-    cart.forEach((item, idx) => {
-        container.innerHTML += `
-            <div class="cart-item product-card">
-                <button class="cart-delete-btn" aria-label="Delete ${item.name}" onclick="removeFromCart(${idx});">✕</button>
-                <img src="${item.image}" alt="${item.name}" width="100">
-                <h3>${item.name}</h3>
-                <p>₹${item.price}</p>
-            </div>
-        `;
-    });
+function getCartTotal(){
+    return cart.reduce((sum, item) => {
+        const priceNum = parseFloat(item.price);
+        return sum + (Number.isFinite(priceNum) ? priceNum : 0);
+    }, 0);
 }
+
+function renderTotal(){
+    const total = getCartTotal();
+    document.getElementById("cart-total").innerText = `₹${total.toFixed(2)}`;
+}
+
 function removeFromCart(index){
     cart.splice(index, 1);
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -72,11 +107,12 @@ function removeFromCart(index){
 }
 
 function renderCart(){
-    let container = document.getElementById("cart-items");
+    container = document.getElementById("cart-items");
     container.innerHTML = "";
 
     if(cart.length === 0){
         container.innerHTML = "<p style='text-align:center;'>Your cart is empty</p>";
+        renderTotal();
         return;
     }
 
@@ -84,12 +120,16 @@ function renderCart(){
         container.innerHTML += `
             <div class="cart-item product-card">
                 <button class="cart-delete-btn" aria-label="Delete ${item.name}" onclick="removeFromCart(${idx});">✕</button>
-                <img src="${item.image}" alt="${item.name}" width="100">
-                <h3>${item.name}</h3>
-                <p>₹${item.price}</p>
+                <a href="${item.detail_url || '#'}" style="text-decoration:none; color:inherit;">
+                    <img src="${item.image}" alt="${item.name}" width="100">
+                    <h3 style="margin:0;">${item.name}</h3>
+                    <p style="margin:0;">₹${item.price}</p>
+                </a>
             </div>
         `;
     });
+
+    renderTotal();
 }
 
 renderCart();

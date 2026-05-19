@@ -24,6 +24,7 @@
     <!-- RIGHT SIDE -->
     <div class="nav-right">
         {% if session.get('user_id') %}
+            <span class="welcome-user">Welcome, {{ session.get('username') }}</span>
             <a href="{{ url_for('logout') }}" class="login-btn">Logout</a>
         {% else %}
             <a href="{{ url_for('login') }}" class="login-btn">Login</a>

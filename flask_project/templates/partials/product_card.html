@@ -38,14 +38,16 @@
 
     <div class="product-actions">
         {% if show_buy_button %}
-            <button class="buy-now-btn"
-                    onclick="return handleAddToCart(this)"
-                    data-name="{{ name|e }}"
-                    data-price="{{ price_float }}"
-                    data-image="{{ image_url|e }}">
-                Buy Now
-            </button>
+            <a href="{{ url_for('login') }}" class="buy-now-link" style="text-decoration:none;">
+                <button class="buy-now-btn" onclick="return handleAddToCart(this)"
+                        data-name="{{ name|e }}"
+                        data-price="{{ price_float }}"
+                        data-image="{{ image_url|e }}">
+                    Buy Now
+                </button>
+            </a>
         {% endif %}
+
 
         {% if show_seller_actions %}
             <!-- Delete -->

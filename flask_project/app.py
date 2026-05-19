@@ -2,7 +2,7 @@ import os
 import sqlite3
 from datetime import datetime
 
-from flask import Flask, flash, render_template, redirect, request, session, url_for
+from flask import Flask, flash, jsonify, render_template, redirect, request, session, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -125,22 +125,27 @@ def login():
         return redirect(url_for("index"))
 
     if request.method == "POST":
-        username = (request.form.get("username") or "").strip()
+        credential = (request.form.get("email") or request.form.get("username") or "").strip().lower()
         password = request.form.get("password") or ""
 
         conn = get_db_connection()
         try:
-            row = conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
+            row = conn.execute("SELECT * FROM users WHERE username = ?", (credential,)).fetchone()
         finally:
             conn.close()
 
         if row is None or not check_password_hash(row["password_hash"], password):
-            flash("Invalid username or password.", "login_error")
-            return redirect(url_for("index"))
+            message = "Invalid username or password."
+            if request.is_json or request.headers.get("X-Requested-With") == "XMLHttpRequest":
+                return jsonify({"success": False, "message": message}), 401
+            flash(message, "login_error")
+            return redirect(url_for("login"))
 
         session["user_id"] = row["id"]
         session["username"] = row["username"]
         session["full_name"] = row["full_name"]
+        if request.is_json or request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return jsonify({"success": True, "redirect": url_for("index")})
         return redirect(url_for("index"))
 
     return render_template("login.html")
@@ -155,16 +160,20 @@ def register():
         confirm_password = request.form.get("confirm_password") or ""
 
         if not full_name or not email or not password:
-            flash("All fields are required.", "register_error")
+            message = "All fields are required."
+            if request.is_json or request.headers.get("X-Requested-With") == "XMLHttpRequest":
+                return jsonify({"success": False, "message": message}), 400
+            flash(message, "register_error")
             return redirect(url_for("register"))
 
         if password != confirm_password:
-            flash("Passwords do not match.", "register_error")
+            message = "Passwords do not match."
+            if request.is_json or request.headers.get("X-Requested-With") == "XMLHttpRequest":
+                return jsonify({"success": False, "message": message}), 400
+            flash(message, "register_error")
             return redirect(url_for("register"))
 
-        # Register form doesn't have username; use email as username
         username = email
-
         password_hash = generate_password_hash(password)
 
         conn = get_db_connection()
@@ -178,12 +187,18 @@ def register():
             )
             conn.commit()
         except sqlite3.IntegrityError:
-            flash("Email or username already registered. Please login.", "register_error")
+            message = "Email or username already registered. Please login."
+            if request.is_json or request.headers.get("X-Requested-With") == "XMLHttpRequest":
+                return jsonify({"success": False, "message": message}), 409
+            flash(message, "register_error")
             return redirect(url_for("login"))
         finally:
             conn.close()
 
-        flash("Account created. Please login.", "register_success")
+        message = "Account created. Please login."
+        if request.is_json or request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return jsonify({"success": True, "message": message, "redirect": url_for("login")})
+        flash(message, "register_success")
         return redirect(url_for("login"))
 
     return render_template("registerhere.html")
@@ -209,6 +224,112 @@ def dashboard():
 @app.route("/cart")
 def cart():
     return render_template("cart.html")
+
+
+
+@app.route("/payment", methods=["GET", "POST"])
+def payment():
+    # Uses checkout data stored in session["last_checkout"]
+    data = session.get("last_checkout") or {}
+
+    if request.method == "POST":
+        # Payment system is mocked for now.
+        session["last_payment"] = {
+            "payment_method": request.form.get("payment_method"),
+            "created_at": datetime.utcnow().isoformat(),
+        }
+        # Clear checkout details after placing order (optional)
+        # data remains for rendering success state.
+        return render_template(
+            "payment.html",
+            success=True,
+            product_name=data.get("product_name", ""),
+            product_price=data.get("product_price", "0"),
+            product_details=data.get("product_details", ""),
+            product_image=data.get("product_image", ""),
+            full_name=data.get("full_name", ""),
+            phone=data.get("phone", ""),
+            address=data.get("address", ""),
+            city=data.get("city", ""),
+            state=data.get("state", ""),
+            pin_code=data.get("pin_code", ""),
+        )
+
+    return render_template(
+        "payment.html",
+        success=False,
+        product_name=data.get("product_name", ""),
+        product_price=data.get("product_price", "0"),
+        product_details=data.get("product_details", ""),
+        product_image=data.get("product_image", ""),
+        full_name=data.get("full_name", ""),
+        phone=data.get("phone", ""),
+        address=data.get("address", ""),
+        city=data.get("city", ""),
+        state=data.get("state", ""),
+        pin_code=data.get("pin_code", ""),
+    )
+
+
+
+@app.route("/checkout", methods=["GET", "POST"])
+def checkout():
+    # Buy Now button should send product info via query string.
+    if request.method == "GET":
+        product_name = request.args.get("product_name", "")
+        product_price = request.args.get("product_price", "0")
+        product_details = request.args.get("product_details", "")
+        product_image = request.args.get("product_image", "")
+
+        return render_template(
+            "checkout.html",
+            product_name=product_name,
+            product_price=product_price,
+            product_details=product_details,
+            product_image=product_image,
+            full_name="",
+            phone="",
+            address="",
+            city="",
+            state="",
+            pin_code="",
+        )
+
+
+    # POST: address submission
+    product_name = request.form.get("product_name", "")
+    product_price = request.form.get("product_price", "0")
+    product_details = request.form.get("product_details", "")
+
+    full_name = (request.form.get("full_name") or "").strip()
+    phone = (request.form.get("phone") or "").strip()
+    address = (request.form.get("address") or "").strip()
+    city = (request.form.get("city") or "").strip()
+    state = (request.form.get("state") or "").strip()
+    pin_code = (request.form.get("pin_code") or "").strip()
+
+    # This project doesn't have a real order/payment system yet.
+    # We just show the address + order summary then redirect user back to cart.
+    # Also capture product_image if provided
+    product_image = request.args.get("product_image") or request.form.get("product_image") or ""
+
+    session["last_checkout"] = {
+        "product_name": product_name,
+        "product_price": product_price,
+        "product_details": product_details,
+        "product_image": product_image,
+        "full_name": full_name,
+        "phone": phone,
+        "address": address,
+        "city": city,
+        "state": state,
+        "pin_code": pin_code,
+        "created_at": datetime.utcnow().isoformat(),
+    }
+
+    # After entering shipping details, go to payment selection page.
+    return redirect(url_for("payment"))
+
 
 
 @app.route("/seller")
@@ -465,12 +586,36 @@ def party():
     return render_template("party.html")
 
 
+
 @app.route("/ethnic")
 def ethnic():
     return render_template("ethnic.html")
 
 
+# Nested product routes used inside ethnic.html
+@app.route("/anarkali")
+def anarkali_details():
+    return render_template("html_project/anarkali.html")
+
+
+@app.route("/kurti")
+def kurti_details():
+    return render_template("html_project/kurti.html")
+
+
+@app.route("/lehenga")
+def lehenga_details():
+    return render_template("html_project/lehenga.html")
+
+
+@app.route("/saree")
+def saree_details():
+    return render_template("html_project/saree.html")
+
+
+
 # --- Product detail pages (wired for redirects from product cards) ---
+
 
 @app.route("/floral")
 def floral_details():
@@ -491,6 +636,22 @@ def cotton_details():
 def loose_details():
     return render_template("html_project/loose.html")
 
+@app.route("/elegant")
+def elegant_details():
+    return render_template('html_project/elegant.html')
+
+
+@app.route("/shimmer")
+def shimmer_details():
+    return render_template('html_project/shimmer.html')
+
+@app.route("/red")
+def red_details():
+    return render_template('html_project/red.html')
+
+@app.route("/black")
+def black_details():
+    return render_template('html_project/black.html')
 
 
 if __name__ == "__main__":
