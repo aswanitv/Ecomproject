@@ -1,0 +1,128 @@
+{% set image_url = p.image_url|default('') %}
+{% set description = p.description|default('') %}
+{% set name = p.name|default('') %}
+{% set raw_price = p.price|default(0) %}
+
+{# Jinja may throw if value isn't numeric. Coerce defensively #}
+{% set price = (raw_price|string)|replace(',', '') %}
+{% set price_float = price|float(0) %}
+
+{% set product_id = p.id|default('') %}
+
+<div class="product-card">
+    {% if image_url %}
+        <img src="{{ image_url }}" alt="{{ name }}">
+    {% else %}
+        <div style="width:120px; height:120px; border-radius:10px; background:#f2f2f2; display:flex; align-items:center; justify-content:center; color:#999;">
+            <i class="fa fa-image"></i>
+        </div>
+    {% endif %}
+
+    <div class="product-info-list">
+        <h3>
+            {{ name }}
+        </h3>
+
+        {% if p.category %}
+            <div style="margin-top:6px;">
+                <span style="display:inline-block; padding:4px 8px; background:#eef6fb; color:#0a74a6; border-radius:12px; font-size:13px; font-weight:700;">{{ p.category }}</span>
+            </div>
+        {% endif %}
+
+        {% if description %}
+            <p>{{ description }}</p>
+        {% else %}
+            <p>No description</p>
+        {% endif %}
+
+        <div class="product-price">₹{{ "%.2f"|format(price_float) }}</div>
+    </div>
+
+    <div class="product-actions">
+        {% if show_buy_button %}
+            <a href="{{ url_for('login') }}" class="buy-now-link" style="text-decoration:none;">
+                <button class="buy-now-btn" onclick="return handleAddToCart(this)"
+                        data-name="{{ name|e }}"
+                        data-price="{{ price_float }}"
+                        data-image="{{ image_url|e }}">
+                    Buy Now
+                </button>
+            </a>
+        {% endif %}
+
+
+        {% if show_seller_actions %}
+            <!-- Delete -->
+            <form method="POST" action="{{ url_for('seller_delete_product') }}" style="margin:0;">
+                <input type="hidden" name="product_id" value="{{ product_id }}">
+                <button
+                    type="submit"
+                    style="padding:10px 14px; background:#ff4d4d; border:none; color:white; border-radius:6px; cursor:pointer; font-weight:700;"
+                >
+                    Delete
+                </button>
+            </form>
+
+            <!-- Edit -->
+            <details style="flex:1; min-width:200px;">
+                <summary style="cursor:pointer; font-weight:700; color:#15c9f6;">Edit</summary>
+
+                <form method="POST" action="{{ url_for('seller_edit_product') }}" style="margin-top:10px;">
+                    <input type="hidden" name="product_id" value="{{ product_id }}">
+
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <input
+                            type="text"
+                            name="name"
+                            value="{{ name }}"
+                            required
+                            placeholder="Product name"
+                            style="flex:1; min-width:160px; padding:10px 12px; border:1px solid #ccc; border-radius:10px; font-family:inherit;"
+                        />
+
+                        <input
+                            type="number"
+                            name="price"
+                            value="{{ price_float }}"
+                            min="0"
+                            step="0.01"
+                            required
+                            placeholder="Price"
+                            style="flex:0.6; min-width:130px; padding:10px 12px; border:1px solid #ccc; border-radius:10px; font-family:inherit;"
+                        />
+                    </div>
+
+                    <input
+                        type="text"
+                        name="category"
+                        value="{{ p.category if p.category else '' }}"
+                        placeholder="Category (optional)"
+                        style="width:100%; margin-top:10px; padding:10px 12px; border:1px solid #ccc; border-radius:10px; font-family:inherit;"
+                    />
+
+                    <textarea
+                        name="description"
+                        rows="2"
+                        placeholder="Description (optional)"
+                        style="width:100%; margin-top:10px; padding:10px 12px; border:1px solid #ccc; border-radius:10px; font-family:inherit;"
+                    >{{ description if description else '' }}</textarea>
+
+                    <input
+                        type="text"
+                        name="image_url"
+                        value="{{ image_url if image_url else '' }}"
+                        placeholder="Image URL (optional)"
+                        style="width:100%; margin-top:10px; padding:10px 12px; border:1px solid #ccc; border-radius:10px; font-family:inherit;"
+                    />
+
+                    <button
+                        type="submit"
+                        style="margin-top:12px; width:100%; padding:12px; background:#15c9f6; border:none; color:white; border-radius:10px; cursor:pointer; font-weight:700;"
+                    >
+                        Save
+                    </button>
+                </form>
+            </details>
+        {% endif %}
+    </div>
+</div>

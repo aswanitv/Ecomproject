@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Category: {{ category }} - Shopuniverse{% endblock %}
+
+{% block content %}
+<div style="padding:40px 20px; max-width:1100px; margin:0 auto;">
+  <h2 style="text-align:center; margin-bottom:16px; color:#222;">{{ category }} Dresses</h2>
+
+  <style>
+    .products{
+      width:100%;
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap:16px;
+      align-items:start;
+      justify-items:center;
+    }
+    .product-card{ width:100%; }
+  </style>
+
+  <div class="products">
+    {% if products and products|length > 0 %}
+      {% for p in products %}
+        {% set show_buy_button = true %}
+        {% set show_seller_actions = false %}
+        {% include 'partials/product_card.html' %}
+      {% endfor %}
+    {% else %}
+      <p style="text-align:center; color:#666;">No products found in this category.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function addToCart(name, price, image) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.push({ name: name, price: price, image: image });
+  localStorage.setItem("cart", JSON.stringify(cart));
+  alert("Item added to cart!");
+  return false;
+}
+
+function handleAddToCart(btn) {
+  const name = btn.dataset.name || "";
+  const price = parseFloat(btn.dataset.price || "0") || 0;
+  const image = btn.dataset.image || "";
+  return addToCart(name, price, image);
+}
+</script>
+{% endblock %}

@@ -1,0 +1,64 @@
+<!-- NAVBAR (universal) -->
+<div class="navbar">
+
+    <div class="logo">
+        <img src="{{ url_for('static', filename='logo3.jpg') }}" alt="Shopuniverse">
+    </div>
+
+    <div class="nav-links">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+
+        <div class="dropdown">
+            <a href="#">Dresses &#9662;</a>
+            <div class="dropdown-content">
+                <a href="{{ url_for('category', category='Casual') }}">Casual Wear</a>
+                <a href="{{ url_for('category', category='Party') }}">Party Wear</a>
+                <a href="{{ url_for('category', category='Ethnic') }}">Ethnic Wear</a>
+            </div>
+        </div>
+
+        <a href="{{ url_for('contact') }}">Contact</a>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="nav-right">
+        {% if session.get('user_id') %}
+            <div class="dropdown user-dropdown">
+                <span class="welcome-user">Welcome, {{ session.get('full_name') or session.get('username') }}</span>
+                <div class="dropdown-content user-dropdown-content">
+                    <a href="{{ url_for('orders') }}">My Orders</a>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                </div>
+            </div>
+        {% else %}
+            <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+        {% endif %}
+
+        <a href="{{ url_for('cart') }}" class="cart-btn">My Cart</a>
+
+        <a href="{{ url_for('seller') }}" class="seller-btn">
+            <i class="fa fa-store"></i> Seller
+        </a>
+    </div>
+
+</div>
+    <script>
+    // Toggle user dropdown on click and close on outside click or Escape
+    document.addEventListener('click', function(e){
+        const clickedDropdown = e.target.closest('.user-dropdown');
+        document.querySelectorAll('.user-dropdown .user-dropdown-content').forEach(el => {
+            if (clickedDropdown && el.parentElement === clickedDropdown) {
+                el.classList.toggle('open');
+            } else {
+                el.classList.remove('open');
+            }
+        });
+    });
+
+    document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.user-dropdown .user-dropdown-content.open').forEach(el => el.classList.remove('open'));
+        }
+    });
+    </script>

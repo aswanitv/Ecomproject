@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Red Satin Party Dress - Shopuniverse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">
+        <img src="{{ url_for('static', filename='logo3.jpg')}}">
+    </div>
+
+    <div class="nav-links">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+
+        <div class="dropdown">
+            <a href="#">Dresses &#9662;</a>
+            <div class="dropdown-content">
+                <a href="{{ url_for('casual') }}">Casual Wear</a>
+                <a href="{{ url_for('party') }}">Party Wear</a>
+                <a href="{{ url_for('ethnic') }}">Ethnic Wear</a>
+            </div>
+        </div>
+
+        <a href="{{ url_for('contact') }}">Contact</a>
+    </div>
+
+    <a href="login.html" class="login-btn">Login</a>
+</div>
+
+<div style="height:80px;"></div>
+
+<!-- PRODUCT DETAILS -->
+<div class="product-details">
+    <div class="product-image">
+        <img src="{{ url_for('static', filename='img/red.jpeg') }}" alt="Red Satin Party Dress">
+    </div>
+
+    <div class="product-info">
+        <h1>Red Satin Party Dress</h1>
+        <p class="price">₹1799</p>
+
+        <p class="description">
+            Make a bold statement with this stunning red satin party dress.
+            Its smooth, glossy finish and elegant design make it perfect for
+            parties, evening events, and special occasions.
+        </p>
+
+        <ul>
+            <li>✔ Luxurious satin fabric</li>
+            <li>✔ Smooth and shiny finish</li>
+            <li>✔ Stylish and elegant design</li>
+            <li>✔ Comfortable fit for long wear</li>
+        </ul>
+
+<button class="buy-btn" onclick="window.location.href='/checkout?product_name=' + encodeURIComponent('Red Satin Party Dress') + '&product_price=' + encodeURIComponent('1799') + '&product_details=' + encodeURIComponent('Make a bold statement with this stunning red satin party dress. Its smooth, glossy finish and elegant design make it perfect for parties, evening events, and special occasions.') + '&product_image=' + encodeURIComponent('/static/img/red.jpeg');">Buy Now</button>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer-top">
+        <a href="#">Back to top</a>
+    </div>
+
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>Shopuniverse</h3>
+            <a href="about.html">About Us</a>
+            <a href="#">Careers</a>
+            <a href="#">Blog</a>
+        </div>
+
+        <div class="footer-column">
+            <h3>Help</h3>
+            <a href="#">Customer Support</a>
+            <a href="#">FAQs</a>
+            <a href="#">Shipping Info</a>
+            <a href="#">Returns & Refunds</a>
+        </div>
+
+        <div class="footer-column">
+            <h3>Categories</h3>
+            <a href="casual.html">Casual Wear</a>
+            <a href="party.html">Party Wear</a>
+            <a href="ethnic.html">Ethnic Wear</a>
+        </div>
+
+        <div class="footer-column">
+            <h3>Policies</h3>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">Return Policy</a>
+        </div>
+
+        <div class="footer-column">
+            <h3>Connect</h3>
+            <a href="#">Instagram</a>
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Email Us</a>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 Shopuniverse | All Rights Reserved</p>
+    </div>
+</div>
+
+</body>
+</html>
+

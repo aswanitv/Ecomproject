@@ -1,138 +1,103 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Shopuniverse - Dresses Store</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
+{% extends 'base.html' %}
 
-<!-- NAVBAR -->
-<div class="navbar">
+{% block title %}Shopuniverse - Dresses Store{% endblock %}
 
-    <div class="logo">
-        <img src="{{ url_for('static', filename='logo3.jpg') }}" alt="Shopuniverse">
+{% block content %}
+<!-- CONTENT WRAPPER (background below navbar) -->
+<div style="background: linear-gradient(135deg, #f7fbff 0%, #e8f8ff 40%, #fff2f8 100%);">
+    <!-- SHORT PLATFORM CONTENT -->
+    <div style="text-align:center; padding: 10px 20px 25px 20px;">
+        <h2 style="color:#222; margin-bottom:6px;">Shopuniverse — Your Fashion Marketplace</h2>
+        <p style="color:#555; max-width: 800px; margin: 0 auto; font-size: 16px; line-height: 1.5;">
+            Discover curated dresses from trusted sellers. Browse the latest collections and add your favorites to cart.
+        </p>
     </div>
 
-    <div class="nav-links">
-        <a href="{{ url_for('index') }}">Home</a>
-        <a href="{{ url_for('about') }}">About</a>
-        <div class="dropdown">
-            <a href="#">Dresses &#9662;</a>
-            <div class="dropdown-content">
-                <a href="{{ url_for('casual') }}">Casual Wear</a>
-                <a href="{{ url_for('party') }}">Party Wear</a>
-                <a href="{{ url_for('ethnic') }}">Ethnic Wear</a>
+    <!-- SELLER PRODUCTS (inspired by seller dashboard cards) -->
+    <div style="padding:40px 20px;">
+        {% if categories and categories|length > 0 %}
+            <div style="text-align:center; margin-bottom:18px;">
+                <a href="{{ url_for('index') }}" style="display:inline-block; margin:4px 6px; padding:6px 12px; background:#eef6fb; color:#0a74a6; border-radius:16px; text-decoration:none; font-weight:700;">All</a>
+                {% for c in categories %}
+                    <a href="{{ url_for('category', category=c) }}" style="display:inline-block; margin:4px 6px; padding:6px 12px; background:#f7f7f7; color:#333; border-radius:16px; text-decoration:none;">{{ c }}</a>
+                {% endfor %}
             </div>
+        {% endif %}
+        <h2 style="text-align:center; margin-bottom:16px; color:#222;">Featured Products</h2>
+
+        <style>
+            /* Align Featured Products layout with seller dashboard product-card grid */
+            .products{
+                width: 100%;
+                padding: 0 !important;
+                margin: 0 !important;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                gap: 16px;
+                align-items: start;
+                justify-items: center;
+            }
+            .product-card{
+                width: 100%;
+            }
+        </style>
+
+        <div class="products">
+            {% if products and products|length > 0 %}
+                {% for p in products %}
+                    {% set show_buy_button = true %}
+                    {% set show_seller_actions = false %}
+                    {% include 'partials/product_card.html' %}
+                {% endfor %}
+            {% else %}
+                <p style="text-align:center; color:#666;">No products available right now.</p>
+            {% endif %}
         </div>
-        <a href="{{ url_for('contact') }}">Contact</a>
     </div>
 
-    <!-- RIGHT SIDE -->
-    <div class="nav-right">
-        <a href="{{ url_for('login') }}" class="login-btn">Login</a>
-        <a href="{{ url_for('cart') }}" class="cart-btn">My Cart</a>
-        <a href="{{ url_for('seller') }}" class="seller-btn">
-        <i class="fa fa-store"></i> Seller
-        </a>
-    </div>
+    <!-- FEATURES -->
+    <div class="features">
 
+        <div class="feature-box">
+            <h3>Latest Fashion</h3>
+            <p>Explore trending dresses updated daily.</p>
+        </div>
+
+        <div class="feature-box">
+            <h3>Affordable Prices</h3>
+            <p>Stylish outfits at budget-friendly prices.</p>
+        </div>
+
+        <div class="feature-box">
+            <h3>Easy Returns</h3>
+            <p>7-day easy return policy.</p>
+        </div>
+
+        <div class="feature-box">
+            <h3>Secure Payments</h3>
+            <p>UPI, cards, and wallet payments.</p>
+        </div>
+
+    </div>
 </div>
+{% endblock %}
 
-<!-- HERO -->
-<div class="hero">
-    <h1>Trendy Dresses for Every Occasion</h1>
-    <p>Discover the latest styles in fashion at Shopuniverse</p>
-    <button onclick="window.location.href='{{ url_for('casual') }}'">Shop Now</button>
-</div>
-
-<!-- FEATURES -->
-<div class="features">
-
-    <div class="feature-box">
-        <h3>Latest Fashion</h3>
-        <p>Explore trending dresses updated daily.</p>
-    </div>
-
-    <div class="feature-box">
-        <h3>Affordable Prices</h3>
-        <p>Stylish outfits at budget-friendly prices.</p>
-    </div>
-
-    <div class="feature-box">
-        <h3>Easy Returns</h3>
-        <p>7-day easy return policy.</p>
-    </div>
-
-    <div class="feature-box">
-        <h3>Secure Payments</h3>
-        <p>UPI, cards, and wallet payments.</p>
-    </div>
-
-</div>
-
-<!-- FOOTER -->
-<div class="footer">
-
-    <div class="footer-top">
-        <a href="#">Back to top</a>
-    </div>
-
-    <div class="footer-content">
-
-        <div class="footer-column">
-            <h3>Shopuniverse</h3>
-            <a href="{{ url_for('about') }}">About Us</a>
-            <a href="#">Careers</a>
-            <a href="#">Blog</a>
-        </div>
-
-        <div class="footer-column">
-            <h3>Help</h3>
-            <a href="#">Customer Support</a>
-            <a href="#">FAQs</a>
-            <a href="#">Shipping Info</a>
-            <a href="#">Returns & Refunds</a>
-        </div>
-
-        <div class="footer-column">
-            <h3>Categories</h3>
-            <a href="{{ url_for('casual') }}">Casual Wear</a>
-            <a href="{{ url_for('party') }}">Party Wear</a>
-            <a href="{{ url_for('ethnic') }}">Ethnic Wear</a>
-        </div>
-
-        <div class="footer-column">
-            <h3>Policies</h3>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms & Conditions</a>
-            <a href="#">Return Policy</a>
-        </div>
-
-        <div class="footer-column">
-            <h3>Connect</h3>
-            <a href="#">Instagram</a>
-            <a href="#">Facebook</a>
-            <a href="#">Twitter</a>
-            <a href="{{ url_for('contact') }}">Email Us</a>
-        </div>
-
-    </div>
-
-    <div class="footer-bottom">
-        <p>&copy; 2026 Shopuniverse | All Rights Reserved</p>
-    </div>
-
-</div>
-
-<!-- CART SCRIPT -->
+{% block scripts %}
 <script>
 function addToCart(name, price, image) {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     cart.push({ name: name, price: price, image: image });
     localStorage.setItem("cart", JSON.stringify(cart));
+    // Do not redirect; just notify user.
     alert("Item added to cart!");
+    return false;
+}
+
+function handleAddToCart(btn) {
+    const name = btn.dataset.name || "";
+    const price = parseFloat(btn.dataset.price || "0") || 0;
+    const image = btn.dataset.image || "";
+    return addToCart(name, price, image);
 }
 </script>
-
-</body>
-</html>
+{% endblock %}

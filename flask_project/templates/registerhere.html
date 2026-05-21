@@ -51,7 +51,9 @@
     ">
         <h2 style="text-align: center; font-size: 22px; color: #111; margin-bottom: 10px;">Create Account</h2>
 
-        <form action="{{ url_for('register') }}" method="POST" style="display: flex; flex-direction: column; gap: 12px;">
+        <div id="register-error" style="display:none; padding: 12px 14px; margin-bottom: 12px; border-radius: 10px; background: #ffe1e1; color: #9a1212; font-weight: 600;"></div>
+
+        <form id="register-form" action="{{ url_for('register') }}" method="POST" style="display: flex; flex-direction: column; gap: 12px;">
 
             <input type="text" name="fullname" placeholder="Full Name" required style="
                 width: 100%; padding: 12px 15px;
@@ -93,6 +95,50 @@
         </p>
     </div>
 </div>
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("register-form");
+    const errorBox = document.getElementById("register-error");
+
+    if (!form || !errorBox) {
+        return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        errorBox.style.display = "none";
+        errorBox.textContent = "";
+
+        const formData = new FormData(form);
+        try {
+            const response = await fetch(form.action, {
+                method: "POST",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "Accept": "application/json"
+                },
+                body: formData,
+                credentials: "same-origin"
+            });
+
+            const data = await response.json().catch(() => null);
+            if (response.ok && data && data.success) {
+                window.location.href = data.redirect || "{{ url_for('login') }}";
+                return;
+            }
+
+            errorBox.textContent = (data && data.message) ? data.message : "Registration failed. Please check your input.";
+            errorBox.style.display = "block";
+        } catch (error) {
+            errorBox.textContent = "Unable to complete registration. Please try again.";
+            errorBox.style.display = "block";
+        }
+    });
+});
+</script>
+{% endblock %}
 
 <!-- FOOTER -->
 <div class="footer">

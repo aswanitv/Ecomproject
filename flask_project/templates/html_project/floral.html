@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Floral Summer Dress - Shopuniverse</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">
+        <img src="{{ url_for('static', filename='logo3.jpg') }}" alt="Shopuniverse logo">
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="casual.html">Back to Casual Wear</a>
+    </div>
+</div>
+
+<div style="height:70px;"></div>
+
+
+<!-- PRODUCT DETAILS -->
+<div class="product-details">
+
+    <!-- IMAGE -->
+    <div class="product-image">
+        <img src="{{ url_for('static', filename='img/frst.jpeg') }}" alt="Floral Summer Dress">
+    </div>
+
+    <!-- INFO -->
+    <div class="product-info">
+        <h1>Floral Summer Dress</h1>
+        <p class="price">₹799</p>
+
+        <p class="description">
+            Stay fresh and stylish with this beautiful floral summer dress.
+            Designed with soft cotton fabric and vibrant prints, it is perfect
+            for daily wear, college, outings, and summer vacations.
+        </p>
+
+        <!-- FEATURES -->
+        <h3>Product Highlights:</h3>
+        <ul>
+            <li>✔ Soft and breathable cotton fabric</li>
+            <li>✔ Lightweight and comfortable</li>
+            <li>✔ Elegant floral print design</li>
+            <li>✔ Perfect for summer and casual wear</li>
+            <li>✔ Easy to wash and maintain</li>
+        </ul>
+
+        <!-- SIZE -->
+        <h3>Available Sizes:</h3>
+        <p>S | M | L | XL</p>
+
+        <!-- COLORS -->
+        <h3>Available Colors:</h3>
+        <p>Pink Floral | Blue Floral | Yellow Floral</p>
+
+        <!-- DELIVERY -->
+        <h3>Delivery & Offers:</h3>
+        <p>✔ Free delivery on orders above ₹999</p>
+        <p>✔ Cash on Delivery available</p>
+        <p>✔ 7-day easy return policy</p>
+
+        <!-- RATING -->
+        <h3>Customer Rating:</h3>
+        <p>⭐⭐⭐⭐☆ (4.2/5 based on 120 reviews)</p>
+
+        <!-- BUTTONS -->
+        <button class="buy-btn" onclick="window.location.href = '/checkout?product_name=' + encodeURIComponent('Floral Summer Dress') + '&product_price=' + encodeURIComponent('799') + '&product_details=' + encodeURIComponent('Stay fresh and stylish with this beautiful floral summer dress.') + '&product_image=' + encodeURIComponent('/static/img/frst.jpeg');">Buy Now</button>
+
+
+        <!-- BACK BUTTON -->
+        <br><br>
+        <a href="casual.html" class="back-btn">⬅ Back to Casual Wear</a>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+
+    <div class="footer-top">
+        <a href="#">Back to top</a>
+    </div>
+
+    <div class="footer-content">
+
+        <!-- Column 1 -->
+        <div class="footer-column">
+            <h3>Shopuniverse</h3>
+            <a href="about.html">About Us</a>
+            <a href="#">Careers</a>
+            <a href="#">Blog</a>
+        </div>
+
+        <!-- Column 2 -->
+        <div class="footer-column">
+            <h3>Help</h3>
+            <a href="#">Customer Support</a>
+            <a href="#">FAQs</a>
+            <a href="#">Shipping Info</a>
+            <a href="#">Returns & Refunds</a>
+        </div>
+
+        <!-- Column 3 -->
+        <div class="footer-column">
+            <h3>Categories</h3>
+            <a href="casual.html">Casual Wear</a>
+            <a href="party.html">Party Wear</a>
+            <a href="ethnic.html">Ethnic Wear</a>
+        </div>
+
+        <!-- Column 4 -->
+        <div class="footer-column">
+            <h3>Policies</h3>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">Return Policy</a>
+        </div>
+
+        <!-- Column 5 -->
+        <div class="footer-column">
+            <h3>Connect</h3>
+            <a href="#">Instagram</a>
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Email Us</a>
+        </div>
+
+    </div>
+
+    <!-- Bottom -->
+    <div class="footer-bottom">
+        <p>&copy; 2026 Shopuniverse | All Rights Reserved</p>
+    </div>
+
+</div>
+
+</body>
+</html>

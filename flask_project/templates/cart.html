@@ -2,40 +2,162 @@
 <html>
 <head>
     <title>My Cart - Shopuniverse</title>
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+    /* Delete button aligned bottom-right inside each cart card */
+    #cart-items .cart-item{
+        position: relative;
+    }
+    #cart-items .cart-delete-btn{
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: #ff4d4d;
+        border: none;
+        color: white;
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+</style>
 </head>
 <body>
 
+
 <div class="navbar">
+
     <div class="logo">
-        <img src="Gemini_Generated_Image_p49shtp49shtp49s.png">
+<img src="{{ url_for('static', filename='logo3.jpg') }}">
     </div>
 
     <div class="nav-links">
-        <a href="index.html">Home</a>
+<a href="{{ url_for('index') }}">Home</a>
     </div>
 </div>
 
 <h1 style="text-align:center; margin-top:20px;">My Cart</h1>
 
-<div id="cart-items" style="padding:20px;"></div>
+<!-- spacing below navbar -->
+<div id="cart-items" style="padding:20px; margin-top:30px;"></div>
+
+<!-- TOTAL SECTION -->
+<div style="max-width:980px; margin:20px auto 40px; padding:0 16px;">
+    <div style="display:flex; justify-content:flex-start; align-items:flex-end; gap:16px; flex-wrap: wrap;">
+        <div style="width:100%; max-width:360px; margin-left:0;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-radius:12px; background:#87cefa; border:1px solid rgba(0,0,0,0.08);">
+                <strong>Total</strong>
+                <strong id="cart-total">₹0</strong>
+            </div>
+        </div>
+        <div style="display:flex; align-items:center;">
+            <button id="checkout-button" style="background:#15c9f6; color:#fff; border:none; border-radius:10px; padding:12px 18px; font-weight:bold; cursor:pointer;">Proceed to Checkout</button>
+        </div>
+    </div>
+</div>
 
 <script>
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// Map product names (or category hint) to local detail pages
+function getDetailUrlForItem(item){
+    // If cart items were stored with a direct url, keep it.
+    if(item && item.detail_url) return item.detail_url;
+
+    const name = (item.name || '').toLowerCase();
+    // Try to infer category by keywords in the name
+    if(name.includes('floral')) return '/floral';
+    if(name.includes('denim')) return '/denim';
+    if(name.includes('cotton')) return '/cotton';
+    if(name.includes('loose')) return '/loose';
+    if(name.includes('saree')) return '/saree';
+    if(name.includes('party')) return '/party';
+    if(name.includes('shimmer')) return '/shimmer';
+
+    // Fallback: allow cart items to provide a detail_url
+    return item.detail_url || '#';
+}
+
+// Ensure cart items have a detail_url so the UI can redirect
+cart = cart.map(item => ({
+    ...item,
+    detail_url: getDetailUrlForItem(item)
+}));
 let container = document.getElementById("cart-items");
 
-if(cart.length === 0){
-    container.innerHTML = "<p style='text-align:center;'>Your cart is empty</p>";
-} else {
-    cart.forEach(item => {
+function getCartTotal(){
+    return cart.reduce((sum, item) => {
+        const priceNum = parseFloat(item.price);
+        return sum + (Number.isFinite(priceNum) ? priceNum : 0);
+    }, 0);
+}
+
+function renderTotal(){
+    const total = getCartTotal();
+    document.getElementById("cart-total").innerText = `₹${total.toFixed(2)}`;
+}
+
+function removeFromCart(index){
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+}
+
+function renderCart(){
+    container = document.getElementById("cart-items");
+    container.innerHTML = "";
+
+    if(cart.length === 0){
+        container.innerHTML = "<p style='text-align:center;'>Your cart is empty</p>";
+        renderTotal();
+        return;
+    }
+
+    cart.forEach((item, idx) => {
         container.innerHTML += `
-            <div style="border:1px solid #ddd; padding:15px; margin:10px;">
-                <img src="${item.image}" width="100">
-                <h3>${item.name}</h3>
-                <p>₹${item.price}</p>
+            <div class="cart-item product-card">
+                <button class="cart-delete-btn" aria-label="Delete ${item.name}" onclick="removeFromCart(${idx});">✕</button>
+                <a href="${item.detail_url || '#'}" style="text-decoration:none; color:inherit;">
+                    <img src="${item.image}" alt="${item.name}" width="100">
+                    <h3 style="margin:0;">${item.name}</h3>
+                    <p style="margin:0;">₹${item.price}</p>
+                </a>
             </div>
         `;
     });
+
+    renderTotal();
+}
+
+renderCart();
+
+const checkoutButton = document.getElementById('checkout-button');
+if (checkoutButton) {
+    const updateCheckoutButton = () => {
+        checkoutButton.disabled = cart.length === 0;
+        checkoutButton.style.opacity = cart.length === 0 ? '0.6' : '1';
+        checkoutButton.style.cursor = cart.length === 0 ? 'not-allowed' : 'pointer';
+    };
+
+    checkoutButton.addEventListener('click', function () {
+        if (cart.length === 0) {
+            return;
+        }
+        window.location.href = '/checkout';
+    });
+
+    const originalRenderCart = renderCart;
+    renderCart = function () {
+        originalRenderCart();
+        updateCheckoutButton();
+    };
+    updateCheckoutButton();
 }
 </script>
 
