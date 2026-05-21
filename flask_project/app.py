@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import json
 from datetime import datetime
 
 from flask import Flask, flash, jsonify, render_template, redirect, request, session, url_for
@@ -65,10 +66,34 @@ def init_db():
             """
         )
 
+        # Orders table: stores simple order records for customers
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS orders (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                total REAL NOT NULL DEFAULT 0,
+                items TEXT, -- JSON-encoded list of cart items
+                status TEXT DEFAULT 'pending',
+                address TEXT,
+                city TEXT,
+                state TEXT,
+                pin_code TEXT,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
+            )
+            """
+        )
+
         # Backfill/compat: add description column if DB already exists without it.
         # SQLite will throw if column exists; we ignore that.
         try:
             conn.execute("ALTER TABLE products ADD COLUMN description TEXT")
+        except sqlite3.OperationalError:
+            pass
+        # Add category column if missing (simple text category like 'Casual','Party','Ethnic')
+        try:
+            conn.execute("ALTER TABLE products ADD COLUMN category TEXT")
         except sqlite3.OperationalError:
             pass
 
@@ -92,16 +117,21 @@ def index():
     try:
         products = conn.execute(
             """
-            SELECT id, name, price, description, image_url, created_at
+            SELECT id, name, price, description, image_url, category, created_at
             FROM products
             ORDER BY datetime(created_at) DESC, id DESC
             LIMIT 12
             """
         ).fetchall()
+        # Fetch distinct non-empty categories for the UI tag list
+        categories_rows = conn.execute(
+            "SELECT DISTINCT category FROM products WHERE category IS NOT NULL AND trim(category) != '' ORDER BY lower(category) ASC"
+        ).fetchall()
+        categories = [r[0] for r in categories_rows]
     finally:
         conn.close()
 
-    return render_template("index.html", products=products)
+    return render_template("index.html", products=products, categories=categories)
 
 
 @app.route("/index")
@@ -130,7 +160,10 @@ def login():
 
         conn = get_db_connection()
         try:
-            row = conn.execute("SELECT * FROM users WHERE username = ?", (credential,)).fetchone()
+            row = conn.execute(
+                "SELECT * FROM users WHERE username = ? OR email = ?",
+                (credential, credential),
+            ).fetchone()
         finally:
             conn.close()
 
@@ -221,6 +254,29 @@ def dashboard():
     return render_template("dashboard.html")
 
 
+@app.route("/orders")
+def orders():
+    if not customer_login_required():
+        flash("Please login to access your orders.", "login_error")
+        return redirect(url_for("login"))
+
+    conn = get_db_connection()
+    try:
+        orders = conn.execute(
+            """
+            SELECT id, total, items, status, address, city, state, pin_code, created_at
+            FROM orders
+            WHERE user_id = ?
+            ORDER BY datetime(created_at) DESC, id DESC
+            """,
+            (session.get("user_id"),),
+        ).fetchall()
+    finally:
+        conn.close()
+
+    return render_template("orders.html", orders=orders)
+
+
 @app.route("/cart")
 def cart():
     return render_template("cart.html")
@@ -233,13 +289,42 @@ def payment():
     data = session.get("last_checkout") or {}
 
     if request.method == "POST":
-        # Payment system is mocked for now.
+        # Block placing order if not logged in
+        if not customer_login_required():
+            flash("Please login to place your order.", "login_error")
+            return redirect(url_for("login"))
+
+        # Payment system is mocked for now, but we do persist the order.
+        cart_items = data.get("cart_items", [])
+        cart_items_json = json.dumps(cart_items) if cart_items is not None else "[]"
+
+        conn = get_db_connection()
+        try:
+            conn.execute(
+                """
+                INSERT INTO orders (user_id, total, items, status, address, city, state, pin_code, created_at)
+                VALUES (?, ?, ?, 'pending', ?, ?, ?, ?, ?)
+                """,
+                (
+                    session.get("user_id"),
+                    float(data.get("cart_total", 0)) if str(data.get("cart_total", 0)).strip() != "" else 0,
+                    cart_items_json,
+                    data.get("address", ""),
+                    data.get("city", ""),
+                    data.get("state", ""),
+                    data.get("pin_code", ""),
+                    datetime.utcnow().isoformat(),
+                ),
+            )
+            conn.commit()
+        finally:
+            conn.close()
+
         session["last_payment"] = {
             "payment_method": request.form.get("payment_method"),
             "created_at": datetime.utcnow().isoformat(),
         }
-        # Clear checkout details after placing order (optional)
-        # data remains for rendering success state.
+
         return render_template(
             "payment.html",
             success=True,
@@ -247,6 +332,8 @@ def payment():
             product_price=data.get("product_price", "0"),
             product_details=data.get("product_details", ""),
             product_image=data.get("product_image", ""),
+            cart_items=cart_items,
+            cart_total=data.get("cart_total", "0"),
             full_name=data.get("full_name", ""),
             phone=data.get("phone", ""),
             address=data.get("address", ""),
@@ -262,6 +349,8 @@ def payment():
         product_price=data.get("product_price", "0"),
         product_details=data.get("product_details", ""),
         product_image=data.get("product_image", ""),
+        cart_items=data.get("cart_items", []),
+        cart_total=data.get("cart_total", "0"),
         full_name=data.get("full_name", ""),
         phone=data.get("phone", ""),
         address=data.get("address", ""),
@@ -281,13 +370,26 @@ def checkout():
         product_details = request.args.get("product_details", "")
         product_image = request.args.get("product_image", "")
 
+        full_name = ""
+        if customer_login_required():
+            conn = get_db_connection()
+            try:
+                row = conn.execute(
+                    "SELECT full_name FROM users WHERE id = ?",
+                    (session.get("user_id"),),
+                ).fetchone()
+                if row is not None and row["full_name"]:
+                    full_name = row["full_name"]
+            finally:
+                conn.close()
+
         return render_template(
             "checkout.html",
             product_name=product_name,
             product_price=product_price,
             product_details=product_details,
             product_image=product_image,
-            full_name="",
+            full_name=full_name,
             phone="",
             address="",
             city="",
@@ -300,6 +402,8 @@ def checkout():
     product_name = request.form.get("product_name", "")
     product_price = request.form.get("product_price", "0")
     product_details = request.form.get("product_details", "")
+    cart_json = request.form.get("cart_json", "")
+    cart_total = request.form.get("cart_total", "0")
 
     full_name = (request.form.get("full_name") or "").strip()
     phone = (request.form.get("phone") or "").strip()
@@ -308,16 +412,38 @@ def checkout():
     state = (request.form.get("state") or "").strip()
     pin_code = (request.form.get("pin_code") or "").strip()
 
+    # If customer is logged in, fetch full name from DB and override form value.
+    if customer_login_required():
+        conn = get_db_connection()
+        try:
+            row = conn.execute(
+                "SELECT full_name FROM users WHERE id = ?",
+                (session.get("user_id"),),
+            ).fetchone()
+            if row is not None and row["full_name"]:
+                full_name = row["full_name"]
+        finally:
+            conn.close()
+
     # This project doesn't have a real order/payment system yet.
     # We just show the address + order summary then redirect user back to cart.
     # Also capture product_image if provided
     product_image = request.args.get("product_image") or request.form.get("product_image") or ""
+
+    cart_items = []
+    if cart_json:
+        try:
+            cart_items = json.loads(cart_json)
+        except ValueError:
+            cart_items = []
 
     session["last_checkout"] = {
         "product_name": product_name,
         "product_price": product_price,
         "product_details": product_details,
         "product_image": product_image,
+        "cart_items": cart_items,
+        "cart_total": cart_total,
         "full_name": full_name,
         "phone": phone,
         "address": address,
@@ -407,6 +533,7 @@ def seller_add_product():
     price_raw = (request.form.get("price") or "").strip()
     description = (request.form.get("description") or "").strip()
     image_url = (request.form.get("image_url") or "").strip()
+    category = (request.form.get("category") or "").strip()
 
     if not name:
         flash("Product name is required.", "seller_error")
@@ -422,8 +549,8 @@ def seller_add_product():
     try:
         conn.execute(
             """
-            INSERT INTO products (seller_id, name, price, description, image_url, created_at)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO products (seller_id, name, price, description, image_url, category, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 session.get("seller_id"),
@@ -431,6 +558,7 @@ def seller_add_product():
                 price,
                 description,
                 image_url if image_url else None,
+                category if category else None,
                 datetime.utcnow().isoformat(),
             ),
         )
@@ -452,7 +580,7 @@ def seller_dashboard():
     try:
         products = conn.execute(
             """
-            SELECT id, name, price, description, image_url, created_at
+            SELECT id, name, price, description, image_url, category, created_at
             FROM products
             WHERE seller_id = ?
             ORDER BY datetime(created_at) DESC, id DESC
@@ -488,6 +616,7 @@ def seller_edit_product():
     price_raw = (request.form.get("price") or "").strip()
     description = (request.form.get("description") or "").strip()
     image_url = (request.form.get("image_url") or "").strip()
+    category = (request.form.get("category") or "").strip()
 
     if not product_id_raw.isdigit():
         flash("Invalid product id.", "seller_error")
@@ -520,7 +649,7 @@ def seller_edit_product():
         conn.execute(
             """
             UPDATE products
-            SET name = ?, price = ?, description = ?, image_url = ?
+            SET name = ?, price = ?, description = ?, image_url = ?, category = ?
             WHERE id = ? AND seller_id = ?
             """,
             (
@@ -528,6 +657,7 @@ def seller_edit_product():
                 price,
                 description if description else None,
                 image_url if image_url else None,
+                category if category else None,
                 product_id,
                 session.get("seller_id"),
             ),
@@ -576,20 +706,38 @@ def seller_delete_product():
     return redirect(url_for("seller_dashboard"))
 
 
+@app.route("/category/<category>")
+def category(category):
+    conn = get_db_connection()
+    try:
+        products = conn.execute(
+            """
+            SELECT id, name, price, description, image_url, category, created_at
+            FROM products
+            WHERE lower(category) = lower(?)
+            ORDER BY datetime(created_at) DESC, id DESC
+            """,
+            (category,),
+        ).fetchall()
+    finally:
+        conn.close()
+
+    return render_template("category.html", products=products, category=category)
+
+
 @app.route("/casual")
 def casual():
-    return render_template("casual.html")
+    return redirect(url_for("category", category="Casual"))
 
 
 @app.route("/party")
 def party():
-    return render_template("party.html")
-
+    return redirect(url_for("category", category="Party"))
 
 
 @app.route("/ethnic")
 def ethnic():
-    return render_template("ethnic.html")
+    return redirect(url_for("category", category="Ethnic"))
 
 
 # Nested product routes used inside ethnic.html

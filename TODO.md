@@ -1,10 +1,18 @@
-# TODO
+# TODO - Shopifyy Flask project
 
-- [ ] Fix 404 for floral image (`/frst.jpeg`) by using Flask static URLs in product detail templates.
-- [ ] Update `flask_project/templates/html_project/floral.html` to load images from `url_for('static', filename='img/...')`.
-- [x] Fix remaining 404s for navbar/logo images in `floral.html`.
+## Completed
+- Updated `party.html` product links to call Flask routes via `url_for(..._details)`.
+- Updated `ethnic.html` product links to call Flask routes via `url_for(..._details)`.
 
-- [ ] Update other html_project detail templates (optional/if needed) to avoid similar 404s for `.jpeg` and logo `.png` images.
-- [ ] Run the Flask app and verify `/frst.jpeg` and `/Gemini_Generated_Image_k8m5q9k8m5q9k8m5q9k8m5.png` (or equivalent) load correctly with no more 404s.
-
-
+## Next steps (needed)
+- Add missing Flask routes in `flask_project/app.py` for:
+  - `elegant_details` (Elegant Evening Gown) -> renders `html_project/elegant.html`
+  - `shimmer_details` (Shimmer Party Dress) -> renders `html_project/shimmer.html`
+  - `red_details` (Red Satin Party Dress) -> renders `html_project/red.html`
+  - `black_details` (Black Sequin Dress) -> renders `html_project/black.html`
+  - `anarkali_details` (Anarkali Dress) -> renders `html_project/anarkali.html`
+  - `kurti_details` (Kurti Set) -> renders `html_project/kurti.html`
+  - `lehenga_details` (Lehenga Choli) -> renders `html_project/lehenga.html`
+  - `saree_details` (Saree Collection) -> renders `html_project/saree.html`
+- Fix any remaining broken links in `party.html`/`ethnic.html` for paths/route names.
+- Run the Flask app and verify clicking each product opens its correct page.

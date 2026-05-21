@@ -49,12 +49,15 @@
 
 <!-- TOTAL SECTION -->
 <div style="max-width:980px; margin:20px auto 40px; padding:0 16px;">
-    <div style="display:flex; justify-content:flex-start; align-items:flex-end;">
+    <div style="display:flex; justify-content:flex-start; align-items:flex-end; gap:16px; flex-wrap: wrap;">
         <div style="width:100%; max-width:360px; margin-left:0;">
             <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-radius:12px; background:#87cefa; border:1px solid rgba(0,0,0,0.08);">
                 <strong>Total</strong>
                 <strong id="cart-total">₹0</strong>
             </div>
+        </div>
+        <div style="display:flex; align-items:center;">
+            <button id="checkout-button" style="background:#15c9f6; color:#fff; border:none; border-radius:10px; padding:12px 18px; font-weight:bold; cursor:pointer;">Proceed to Checkout</button>
         </div>
     </div>
 </div>
@@ -133,6 +136,29 @@ function renderCart(){
 }
 
 renderCart();
+
+const checkoutButton = document.getElementById('checkout-button');
+if (checkoutButton) {
+    const updateCheckoutButton = () => {
+        checkoutButton.disabled = cart.length === 0;
+        checkoutButton.style.opacity = cart.length === 0 ? '0.6' : '1';
+        checkoutButton.style.cursor = cart.length === 0 ? 'not-allowed' : 'pointer';
+    };
+
+    checkoutButton.addEventListener('click', function () {
+        if (cart.length === 0) {
+            return;
+        }
+        window.location.href = '/checkout';
+    });
+
+    const originalRenderCart = renderCart;
+    renderCart = function () {
+        originalRenderCart();
+        updateCheckoutButton();
+    };
+    updateCheckoutButton();
+}
 </script>
 
 </body>

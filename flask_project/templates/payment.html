@@ -106,13 +106,26 @@
             <div class="payment-right">
                 <div class="card">
                     <h2 style="margin:0 0 10px 0;">Order Summary</h2>
-                    <div>
-                        <h3 style="margin:0 0 6px 0;">{{ product_name }}</h3>
-                        <p style="margin:0; font-weight:bold; color: green; font-size: 18px;">₹{{ product_price }}</p>
-                        <p style="margin:8px 0 0 0; color:#555;">{{ product_details }}</p>
-                    </div>
-                    {% if product_image %}
-                    <img src="{{ product_image }}" alt="{{ product_name }}" style="margin-top:12px; width:100%; border-radius:10px; object-fit:cover;">
+                    {% if cart_items and cart_items|length > 0 %}
+                        <div>
+                            {% for item in cart_items %}
+                                <div style="margin-bottom:12px;">
+                                    <h3 style="margin:0 0 6px 0;">{{ item.name }}</h3>
+                                    <p style="margin:0; font-weight:bold; color: green; font-size: 16px;">₹{{ item.price }}</p>
+                                    <p style="margin: 6px 0 0 0; color:#555;">{{ item.details }}</p>
+                                </div>
+                            {% endfor %}
+                            <div style="margin-top:12px; font-size:16px; font-weight:bold;">Order Total: ₹{{ cart_total }}</div>
+                        </div>
+                    {% else %}
+                        <div>
+                            <h3 style="margin:0 0 6px 0;">{{ product_name }}</h3>
+                            <p style="margin:0; font-weight:bold; color: green; font-size: 18px;">₹{{ product_price }}</p>
+                            <p style="margin:8px 0 0 0; color:#555;">{{ product_details }}</p>
+                        </div>
+                        {% if product_image %}
+                        <img src="{{ product_image }}" alt="{{ product_name }}" style="margin-top:12px; width:100%; border-radius:10px; object-fit:cover;">
+                        {% endif %}
                     {% endif %}
                     <hr style="margin:14px 0; border: none; border-top: 1px solid rgba(0,0,0,0.08);">
                     <div style="font-size:14px; color:#333;">

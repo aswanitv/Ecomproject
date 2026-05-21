@@ -27,6 +27,12 @@
             {% endif %}
         </h3>
 
+        {% if p.category %}
+            <div style="margin-top:6px;">
+                <span style="display:inline-block; padding:4px 8px; background:#eef6fb; color:#0a74a6; border-radius:12px; font-size:13px; font-weight:700;">{{ p.category }}</span>
+            </div>
+        {% endif %}
+
         {% if description %}
             <p>{{ description }}</p>
         {% else %}
@@ -89,6 +95,14 @@
                             style="flex:0.6; min-width:130px; padding:10px 12px; border:1px solid #ccc; border-radius:10px; font-family:inherit;"
                         />
                     </div>
+
+                    <input
+                        type="text"
+                        name="category"
+                        value="{{ p.category if p.category else '' }}"
+                        placeholder="Category (optional)"
+                        style="width:100%; margin-top:10px; padding:10px 12px; border:1px solid #ccc; border-radius:10px; font-family:inherit;"
+                    />
 
                     <textarea
                         name="description"

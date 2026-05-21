@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}My Orders - Shopuniverse{% endblock %}
+
+{% block content %}
+<div style="max-width: 980px; margin: 100px auto 40px; padding: 0 16px;">
+    <h2 style="margin-bottom: 16px; color: #111;">My Orders</h2>
+    {% if orders and orders|length > 0 %}
+        <div class="orders-list">
+            {% for o in orders %}
+                <div class="order-card" style="border:1px solid #e3e3e3; padding:12px; margin-bottom:12px; border-radius:8px; background:white;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div><strong>Order #{{ o.id }}</strong></div>
+                        <div style="color:#666; font-size:14px;">{{ o.created_at }}</div>
+                    </div>
+                    <div style="margin-top:8px; color:#333;">
+                        <div><b>Total:</b> ₹{{ '%.2f' | format(o.total or 0) }}</div>
+                        <div><b>Status:</b> {{ o.status or 'pending' }}</div>
+                        {% if o.items %}
+                            <div style="margin-top:8px;"><b>Items:</b>
+                                <pre style="white-space:pre-wrap; background:#fafafa; padding:8px; border-radius:6px; margin-top:6px;">{{ o.items }}</pre>
+                            </div>
+                        {% endif %}
+                        {% if o.address %}
+                            <div style="margin-top:8px; color:#555;"><b>Shipping:</b> {{ o.address }}{% if o.city %}, {{ o.city }}{% endif %}{% if o.state %}, {{ o.state }}{% endif %} {% if o.pin_code %}- {{ o.pin_code }}{% endif %}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="color: #555; font-size: 16px; line-height: 1.6;">
+            You have not placed any orders yet. When you do, they will appear here for easy access.
+        </p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -90,11 +90,13 @@
             <div class="checkout-card">
                 <h2 style="margin-bottom:10px;">Shipping Address</h2>
 
-        <form method="POST" action="{{ url_for('checkout') }}">
+        <form id="checkout-form" method="POST" action="{{ url_for('checkout') }}">
                     <input type="hidden" name="product_name" value="{{ product_name|e }}">
                     <input type="hidden" name="product_price" value="{{ product_price|e }}">
                     <input type="hidden" name="product_details" value="{{ product_details|e }}">
                     <input type="hidden" name="product_image" value="{{ product_image|e }}">
+                    <input type="hidden" name="cart_json" id="cart_json" value="">
+                    <input type="hidden" name="cart_total" id="cart_total" value="0">
 
                     <label>Full Name</label>
                     <input name="full_name" required value="{{ full_name|default('') }}" />
@@ -125,15 +127,13 @@
         <div class="checkout-right">
             <div class="checkout-card">
                 <h2 style="margin-bottom:10px;">Order Summary</h2>
-                <div class="product-mini">
-                    {% if product_image %}
-                    <img src="{{ product_image }}" alt="{{ product_name }}">
-                    {% endif %}
-                    <div>
-                        <h3 style="margin:0 0 6px 0;">{{ product_name }}</h3>
-                        <p style="margin:0; font-weight:bold; color: green; font-size: 18px;">₹{{ product_price }}</p>
-                        <p style="margin: 8px 0 0 0; color:#555;">{{ product_details }}</p>
-                    </div>
+                <div id="checkout-items"></div>
+                <div id="checkout-empty" style="color:#555; padding:14px 0; display:none;">
+                    Your cart is empty. Add items to your cart before checking out.
+                </div>
+                <div style="margin-top:16px; padding:14px; border:1px solid rgba(0,0,0,0.08); border-radius:10px; display:flex; justify-content:space-between; align-items:center; background:#f4fbff;">
+                    <strong>Order Total</strong>
+                    <strong id="order-total">₹0.00</strong>
                 </div>
             </div>
         </div>
@@ -145,8 +145,76 @@
 </div>
 
 <script>
-    // After the shipping form is submitted (POST /checkout), the backend redirects to /cart.
-    // We'll navigate to payment-methods page when user returns from cart.
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const checkoutItems = document.getElementById('checkout-items');
+    const checkoutEmpty = document.getElementById('checkout-empty');
+    const orderTotal = document.getElementById('order-total');
+    const cartJsonInput = document.getElementById('cart_json');
+    const cartTotalInput = document.getElementById('cart_total');
+    const form = document.getElementById('checkout-form');
+    const continueButton = document.querySelector('.continue-wrap button');
+
+    const buyNowProduct = {
+        name: document.querySelector('input[name="product_name"]').value,
+        price: document.querySelector('input[name="product_price"]').value,
+        details: document.querySelector('input[name="product_details"]').value,
+        image: document.querySelector('input[name="product_image"]').value,
+    };
+
+    const validCart = Array.isArray(cart) ? cart : [];
+    const items = validCart.length ? validCart : (buyNowProduct.name ? [buyNowProduct] : []);
+
+    function parsePrice(value){
+        if (value === undefined || value === null) return 0;
+        const numeric = value.toString().replace(/[^0-9.]/g, '');
+        return parseFloat(numeric) || 0;
+    }
+
+    function renderItems(){
+        checkoutItems.innerHTML = '';
+        if (!items.length){
+            checkoutEmpty.style.display = 'block';
+            continueButton.disabled = true;
+            return;
+        }
+
+        checkoutEmpty.style.display = 'none';
+        continueButton.disabled = false;
+
+        items.forEach(item => {
+            const price = parsePrice(item.price);
+            checkoutItems.innerHTML += `
+                <div class="product-mini" style="margin-bottom:14px; gap:14px;">
+                    ${item.image ? `<img src="${item.image}" alt="${item.name}">` : ''}
+                    <div>
+                        <h3 style="margin:0 0 6px 0;">${item.name || 'Product'}</h3>
+                        <p style="margin:0; font-weight:bold; color: green; font-size: 18px;">₹${price.toFixed(2)}</p>
+                        <p style="margin: 8px 0 0 0; color:#555;">${item.details || ''}</p>
+                    </div>
+                </div>
+            `;
+        });
+
+        const total = items.reduce((sum, item) => sum + parsePrice(item.price), 0);
+        orderTotal.innerText = `₹${total.toFixed(2)}`;
+        cartJsonInput.value = JSON.stringify(validCart);
+        cartTotalInput.value = total.toFixed(2);
+
+        if (!validCart.length && buyNowProduct.name){
+            document.querySelector('input[name="product_name"]').value = buyNowProduct.name || '';
+            document.querySelector('input[name="product_price"]').value = buyNowProduct.price || '0';
+            document.querySelector('input[name="product_details"]').value = buyNowProduct.details || '';
+            document.querySelector('input[name="product_image"]').value = buyNowProduct.image || '';
+        }
+    }
+
+    renderItems();
+
+    form.addEventListener('submit', function () {
+        if (!items.length){
+            return false;
+        }
+    });
 </script>
 
 

@@ -12,9 +12,9 @@
         <div class="dropdown">
             <a href="#">Dresses &#9662;</a>
             <div class="dropdown-content">
-                <a href="{{ url_for('casual') }}">Casual Wear</a>
-                <a href="{{ url_for('party') }}">Party Wear</a>
-                <a href="{{ url_for('ethnic') }}">Ethnic Wear</a>
+                <a href="{{ url_for('category', category='Casual') }}">Casual Wear</a>
+                <a href="{{ url_for('category', category='Party') }}">Party Wear</a>
+                <a href="{{ url_for('category', category='Ethnic') }}">Ethnic Wear</a>
             </div>
         </div>
 
@@ -24,8 +24,13 @@
     <!-- RIGHT SIDE -->
     <div class="nav-right">
         {% if session.get('user_id') %}
-            <span class="welcome-user">Welcome, {{ session.get('username') }}</span>
-            <a href="{{ url_for('logout') }}" class="login-btn">Logout</a>
+            <div class="dropdown user-dropdown">
+                <span class="welcome-user">Welcome, {{ session.get('full_name') or session.get('username') }}</span>
+                <div class="dropdown-content user-dropdown-content">
+                    <a href="{{ url_for('orders') }}">My Orders</a>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                </div>
+            </div>
         {% else %}
             <a href="{{ url_for('login') }}" class="login-btn">Login</a>
         {% endif %}
@@ -38,3 +43,22 @@
     </div>
 
 </div>
+    <script>
+    // Toggle user dropdown on click and close on outside click or Escape
+    document.addEventListener('click', function(e){
+        const clickedDropdown = e.target.closest('.user-dropdown');
+        document.querySelectorAll('.user-dropdown .user-dropdown-content').forEach(el => {
+            if (clickedDropdown && el.parentElement === clickedDropdown) {
+                el.classList.toggle('open');
+            } else {
+                el.classList.remove('open');
+            }
+        });
+    });
+
+    document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.user-dropdown .user-dropdown-content.open').forEach(el => el.classList.remove('open'));
+        }
+    });
+    </script>
